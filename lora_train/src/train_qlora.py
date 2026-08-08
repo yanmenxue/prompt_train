@@ -69,7 +69,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--deepspeed", default=None, help="path to ds config; set None to disable")
     p.add_argument("--max_length", type=int, default=1024)
     p.add_argument("--max_samples", type=int, default=None, help="cap dataset size for smoke tests")
-    p.add_argument("--per_device_batch", type=int, default=4)
+    p.add_argument("--per_device_batch", type=int, default=1)
     p.add_argument("--grad_accum", type=int, default=4)
     p.add_argument("--lr", type=float, default=5e-5)
     p.add_argument("--epochs", type=float, default=3.0)
@@ -190,7 +190,7 @@ def main() -> None:
             attn_impl = "sdpa"
     model_kwargs: dict[str, Any] = {
         "trust_remote_code": True,
-        "torch_dtype": torch.bfloat16,
+        "dtype": torch.bfloat16,
         "attn_implementation": attn_impl,
     }
     if args.load_in_4bit:
@@ -217,10 +217,11 @@ def main() -> None:
         bias="none",
         target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
     )
-    if args.load_in_4bit:
-        from peft import prepare_model_for_kbit_training
-
-        model = prepare_model_for_kbit_training(model)
+    # NOTE: do NOT call prepare_model_for_kbit_training() here. On 24GB cards
+    # it casts LayerNorm weights/inputs to fp32, which pushes a 32B 4bit base
+    # (already ~20GB) over the edge and OOMs. Modern peft (>=0.11) handles
+    # the kbit prep automatically inside get_peft_model for QLoRA nf4 + bf16
+    # compute, which is sufficient for RMSNorm stability on Qwen3.
     model = get_peft_model(model, lora_config)
     model.print_trainable_parameters()
 
