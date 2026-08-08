@@ -29,12 +29,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import torch
-from accelerate import init_empty_weights
 from datasets import Dataset
 from peft import LoraConfig, TaskType, get_peft_model
 from transformers import (
@@ -283,6 +283,19 @@ def main() -> None:
     args = parse_args()
     set_seed(args.seed)
 
+    # DeepSpeed ZeRO-3: initialize the process group BEFORE loading the model,
+    # so from_pretrained can run inside deepspeed.zero.Init() (see the model
+    # block below) and partition each parameter across ranks at creation time.
+    # NCCL requires torch.cuda.set_device first; the deepspeed launcher sets
+    # LOCAL_RANK in the environment.
+    if args.deepspeed:
+        import torch.distributed as dist
+
+        local_rank = int(os.environ.get("LOCAL_RANK", args.local_rank))
+        torch.cuda.set_device(local_rank)
+        if not dist.is_initialized():
+            dist.init_process_group(backend="nccl")
+
     # ---- tokenizer -------------------------------------------------------
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, trust_remote_code=True)
     if tokenizer.pad_token is None:
@@ -314,16 +327,22 @@ def main() -> None:
             bnb_4bit_compute_dtype=torch.bfloat16,
             bnb_4bit_quant_storage=torch.uint8,
         )
-    # ZeRO-3: build the module on the meta device and let DeepSpeed shard-load
-    # each rank's slice on demand. from_pretrained on a real device loads the
-    # FULL bf16 weights onto EVERY rank (~64GB each for a 32B base), filling
-    # the card before ZeRO-3 can shard -> OOM at
-    # DeepSpeedEngine._configure_distributed_model's .to(). With
-    # init_empty_weights the module is meta placeholders (0 bytes), and the
-    # DeepSpeed engine materializes per-rank shards during init.
+    # ZeRO-3: load under deepspeed.zero.Init() so each parameter is partitioned
+    # across ranks AT CREATION TIME. The two naive paths both die in DS 0.19.4's
+    # _configure_distributed_model, which calls module.to(device) on whatever
+    # we hand it:
+    #   - full bf16 base loaded to CPU per rank -> .to() fills the 24GB GPU
+    #     and OOMs (64GB model, 24GB card).
+    #   - init_empty_weights (meta) -> .to() hits "Cannot copy out of meta
+    #     tensor; no data".
+    # zero.Init patches parameter creation so each rank only ever holds its
+    # 1/world_size partition (~11GB for 32B across 6 GPUs); the later .to() is
+    # then a no-op on already-placed shards. Requires the process group, which
+    # we initialized at the top of main().
     if args.deepspeed:
-        model_kwargs["low_cpu_mem_usage"] = True
-        with init_empty_weights():
+        from deepspeed import zero
+
+        with zero.Init(config_dict_or_path=args.deepspeed):
             model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
     else:
         model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
