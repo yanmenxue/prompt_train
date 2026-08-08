@@ -296,6 +296,17 @@ def main() -> None:
         if not dist.is_initialized():
             dist.init_process_group(backend="nccl")
 
+        # TEMP DEBUG: probe DS comm layer world_size vs torch's.
+        import deepspeed.comm as ds_comm
+
+        ds_ws = ds_comm.get_world_size()
+        torch_ws = dist.get_world_size()
+        print(
+            f"[debug rank{local_rank}] torch_world_size={torch_ws} "
+            f"ds_comm_world_size={ds_ws}",
+            flush=True,
+        )
+
     # ---- tokenizer -------------------------------------------------------
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, trust_remote_code=True)
     if tokenizer.pad_token is None:
