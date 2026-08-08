@@ -67,7 +67,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--val_file", default="lora_train/dataset/val.jsonl")
     p.add_argument("--output_dir", default="lora_train/runs/qwen3_32b_boundary_qlora")
     p.add_argument("--deepspeed", default=None, help="path to ds config; set None to disable")
-    p.add_argument("--max_length", type=int, default=1024)
+    p.add_argument("--max_length", type=int, default=512, help="seq len cap; Qwen3 boundary samples are short (~300-500 tokens), 512 suffices and cuts the fp32-logits OOM risk")
     p.add_argument("--max_samples", type=int, default=None, help="cap dataset size for smoke tests")
     p.add_argument("--per_device_batch", type=int, default=1)
     p.add_argument("--grad_accum", type=int, default=4)
@@ -113,12 +113,15 @@ class TokenizerCache:
 
 def build_tokenize_fn(tokenizer: Any, max_length: int):
     """Produce input_ids + labels where only the assistant id token has a
-    non-ignored label. We achieve completion-only loss by:
-      1. tokenizing system+user (the prompt) without the assistant,
-      2. tokenizing the assistant id alone,
-      3. concatenating, with labels = [-100]*len(prompt) + assistant_tokens.
-    No chat template override needed: we still render via apply_chat_template
-    so special tokens / /no_think placement match the on-line format.
+    non-ignored label (completion-only loss).
+
+    Qwen3's chat template does NOT support return_assistant_tokens_mask (it
+    lacks the `{% generation %}` keyword), so we use the prompt-prefix slice
+    method WITH a strict prefix check: tokenize the full conversation and the
+    prompt-only (add_generation_prompt=True), then assert the prompt ids are
+    an exact prefix of the full ids. If the check fails (rare boundary
+    quirk), we drop the sample (emit all -100 labels) rather than risk
+    silently mis-aligned labels.
     """
     def tokenize(example: dict) -> dict[str, torch.Tensor]:
         convs = example["conversations"]
@@ -131,28 +134,41 @@ def build_tokenize_fn(tokenizer: Any, max_length: int):
             {"role": "user", "content": convs[1]["value"]},
             {"role": "assistant", "content": label},
         ]
+        messages_prompt = messages_full[:-1]
 
-        # Use the tokenizer's native assistant-token mask. This is robust
-        # against chat-template token-boundary quirks (BOS/im_start placement
-        # at the generation_prompt<->assistant seam) that would silently
-        # mis-align a hand-rolled prompt/completion slice.
-        enc = tokenizer.apply_chat_template(
+        full_ids: list[int] = tokenizer.apply_chat_template(
             messages_full,
             tokenize=True,
             add_generation_prompt=False,
             enable_thinking=False,
-            return_dict=True,
-            return_assistant_tokens_mask=True,
         )
-        input_ids: list[int] = enc["input_ids"]
-        assistant_mask: list[int] = enc.get("assistant_masks", [])
-        if len(assistant_mask) != len(input_ids):
-            # template didn't support assistant masks; fall back to masking
-            # everything (loss will be 0 -> caller should switch template).
-            print("[warn] assistant_masks length mismatch; masking all tokens", flush=True)
-            labels = [-100] * len(input_ids)
-        else:
-            labels = [tok if mask == 1 else -100 for tok, mask in zip(input_ids, assistant_mask)]
+        prompt_ids: list[int] = tokenizer.apply_chat_template(
+            messages_prompt,
+            tokenize=True,
+            add_generation_prompt=True,   # ends right before assistant turn
+            enable_thinking=False,
+        )
+
+        # STRICT prefix check: prompt_ids must be an exact prefix of full_ids.
+        # If not, the chat template has a boundary quirk and a hand-rolled
+        # slice would silently mis-align labels. Drop the sample instead.
+        n_prompt = len(prompt_ids)
+        if n_prompt >= len(full_ids) or full_ids[:n_prompt] != prompt_ids:
+            print(
+                f"[warn] prompt is not an exact prefix of full; dropping sample "
+                f"(prompt={n_prompt}, full={len(full_ids)})",
+                flush=True,
+            )
+            input_ids = full_ids[-max_length:]
+            return {
+                "input_ids": input_ids,
+                "attention_mask": [1] * len(input_ids),
+                "labels": [-100] * len(input_ids),
+            }
+
+        # completion-only loss: mask prompt, keep assistant tail.
+        labels = [-100] * n_prompt + full_ids[n_prompt:]
+        input_ids = full_ids
 
         # Truncate from the left if too long (keep the assistant tail).
         if len(input_ids) > max_length:
