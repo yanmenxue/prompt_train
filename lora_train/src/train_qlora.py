@@ -123,6 +123,29 @@ def build_tokenize_fn(tokenizer: Any, max_length: int):
     quirk), we drop the sample (emit all -100 labels) rather than risk
     silently mis-aligned labels.
     """
+    def to_id_list(out: Any) -> list[int]:
+        """Normalize apply_chat_template output to a plain list[int].
+
+        Some transformers versions return a tokenizers.Encoding object (with
+        .ids, .type_ids, ...) instead of a list[int]. Slicing/len/== on an
+        Encoding behave differently from a list and silently break the prefix
+        check. Always coerce to list[int].
+        """
+        if isinstance(out, list):
+            return [int(x) for x in out]
+        # tokenizers.Encoding -> has .ids
+        ids = getattr(out, "ids", None)
+        if ids is not None:
+            return [int(x) for x in ids]
+        # dict-like (return_dict=True) -> "input_ids"
+        if isinstance(out, dict) and "input_ids" in out:
+            return [int(x) for x in out["input_ids"]]
+        # last resort: try iteration
+        try:
+            return [int(x) for x in out]
+        except Exception:
+            raise RuntimeError(f"无法从 apply_chat_template 输出提取 token ids: {type(out)}")
+
     def tokenize(example: dict) -> dict[str, torch.Tensor]:
         convs = example["conversations"]
         assert len(convs) == 3 and convs[0]["from"] == "system" and convs[1]["from"] == "user" and convs[2]["from"] == "assistant"
@@ -136,18 +159,20 @@ def build_tokenize_fn(tokenizer: Any, max_length: int):
         ]
         messages_prompt = messages_full[:-1]
 
-        full_ids: list[int] = tokenizer.apply_chat_template(
+        full_ids = to_id_list(tokenizer.apply_chat_template(
             messages_full,
             tokenize=True,
             add_generation_prompt=False,
             enable_thinking=False,
-        )
-        prompt_ids: list[int] = tokenizer.apply_chat_template(
+            return_dict=False,
+        ))
+        prompt_ids = to_id_list(tokenizer.apply_chat_template(
             messages_prompt,
             tokenize=True,
             add_generation_prompt=True,   # ends right before assistant turn
             enable_thinking=False,
-        )
+            return_dict=False,
+        ))
 
         # STRICT prefix check: prompt_ids must be an exact prefix of full_ids.
         # If not, the chat template has a boundary quirk and a hand-rolled
@@ -245,8 +270,15 @@ def main() -> None:
     train_rows = load_sharegpt(Path(args.train_file), args.max_samples)
     val_rows = load_sharegpt(Path(args.val_file), args.max_samples)
     tokenize = build_tokenize_fn(tokenizer, args.max_length)
-    train_ds = Dataset.from_list(train_rows).map(tokenize, remove_columns=["conversations"])
-    val_ds = Dataset.from_list(val_rows).map(tokenize, remove_columns=["conversations"])
+    # num_proc=1 + load_from_cache_file=False: the tokenize fn returns plain
+    # lists which Arrow's multiprocess writer can choke on (OverflowError);
+    # single-process avoids that and keeps cache off for smoke runs.
+    train_ds = Dataset.from_list(train_rows).map(
+        tokenize, remove_columns=["conversations"], num_proc=1, load_from_cache_file=False
+    )
+    val_ds = Dataset.from_list(val_rows).map(
+        tokenize, remove_columns=["conversations"], num_proc=1, load_from_cache_file=False
+    )
 
     collator = DataCollatorForSeq2Seq(
         tokenizer=tokenizer,
