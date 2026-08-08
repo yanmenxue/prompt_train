@@ -338,10 +338,15 @@ def main() -> None:
     # zero.Init patches parameter creation so each rank only ever holds its
     # 1/world_size partition (~11GB for 32B across 6 GPUs); the later .to() is
     # then a no-op on already-placed shards. Requires the process group, which
-    # we initialized at the top of main().
+    # we initialized at the top of main(). low_cpu_mem_usage=True makes
+    # from_pretrained stream tensor-by-tensor from disk (meta init), so each
+    # rank's CPU peak is ~one tensor, not the full 64GB state_dict; without it
+    # every rank buffers the whole 64GB on CPU before partitioning (6x = 384GB
+    # transient). OS page cache dedupes the 6 disk reads to ~64GB of real I/O.
     if args.deepspeed:
         from deepspeed import zero
 
+        model_kwargs["low_cpu_mem_usage"] = True
         with zero.Init(config_dict_or_path=args.deepspeed):
             model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
     else:
