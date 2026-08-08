@@ -1,19 +1,5 @@
-(python12) root@poissongpu006:/disk1/duhw/code/prompt_train#
-(python12) root@poissongpu006:/disk1/duhw/code/prompt_train#  python -c "import torch, transformers, deepspeed, peft; print('torch', torch.__version__, 'cuda', torch.version.cuda, 'cudnn', torch.backends.cudnn.version());
-  print('transformers', transformers.__version__); print('deepspeed', deepspeed.__version__); print('peft', peft.__version__)"
-  nvidia-smi --query-gpu=driver_version,memory.total --format=csv
-  free -h
-  File "<string>", line 2
-    print('transformers', transformers.__version__); print('deepspeed', deepspeed.__version__); print('peft', peft.__version__)
-IndentationError: unexpected indent
-driver_version, memory.total [MiB]
-580.65.06, 24576 MiB
-580.65.06, 24576 MiB
-580.65.06, 24576 MiB
-580.65.06, 24576 MiB
-580.65.06, 24576 MiB
-580.65.06, 24576 MiB
-580.65.06, 24576 MiB
-580.65.06, 24576 MiB
-               total        used        free      shared  buff/cache   available
-Mem:           503Gi        31Gi       406Gi       181Mi        65Gi       469Gi
+ python <<'PY'                                                                                                                                                  
+  import torch, transformers, deepspeed, peft
+  print("torch", torch.__version__, "cuda", torch.version.cuda, "cudnn", torch.backends.cudnn.version())
+  print("transformers", transformers.__version__, "deepspeed", deepspeed.__version__, "peft", peft.__version__)
+  PY 
