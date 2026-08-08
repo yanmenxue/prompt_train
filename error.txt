@@ -1,19 +1,7 @@
-(python12) root@poissongpu006:/disk1/duhw/code/prompt_train#
-(python12) root@poissongpu006:/disk1/duhw/code/prompt_train# # 先确认 4bit 依赖在
-  python -c "import bitsandbytes as bnb; print('bnb', bnb.__version__)"
-
-  # 单卡、4bit、不挂 deepspeed，5 步
-  CUDA_VISIBLE_DEVICES=2 python lora_train/src/train_qlora.py \
-      --max_steps 5 --max_samples 4 --per_device_batch 1 --grad_accum 1 \
-      --model_name ../../models/Qwen3_32B/ --attn_impl sdpa --load_in_4bit
-bnb 0.50.0
-Loading weights: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:17<00:00, 40.73it/s]
-trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 126.03 examples/s]
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 221.09 examples/s]
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
-{'loss': '0.6063', 'grad_norm': '3.162e-05', 'learning_rate': '7.322e-06', 'epoch': '1.25'}
-{'eval_loss': '0.2439', 'eval_runtime': '0.7481', 'eval_samples_per_second': '1.337', 'eval_steps_per_second': '1.337', 'epoch': '1.25'}
-{'train_runtime': '13.84', 'train_samples_per_second': '0.361', 'train_steps_per_second': '0.361', 'train_loss': '0.6063', 'epoch': '1.25'}
-100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:14<00:00,  2.86s/it]
-Training complete. Adapter saved to lora_train/runs/qwen3_32b_boundary_qlora
+  PYTHONFAULTHANDLER=1 CUDA_LAUNCH_BLOCKING=1 NCCL_DEBUG=INFO \
+  CUDA_VISIBLE_DEVICES=2,3,4,5,6,7 \
+  torchrun --nproc_per_node=6 --master_port=29500 \
+    lora_train/src/train_qlora.py \
+    --max_steps 5 --max_samples 16 --per_device_batch 1 --grad_accum 1 \
+    --model_name ../../models/Qwen3_32B/ --attn_impl sdpa \
+    --deepspeed lora_train/configs/ds_zero3_offload.json
