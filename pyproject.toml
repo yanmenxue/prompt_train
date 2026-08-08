@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "promptgen-intent-router"
+version = "0.1.0"
+description = "A fail-closed intent selector for Qwen3-32B"
+requires-python = ">=3.10"
+dependencies = [
+    "openai>=2.0,<3",
+]
+
+[project.scripts]
+intent-router = "intent_router.cli:main"
+intent-router-batch = "intent_router.batch:main"
+
+[tool.setuptools.packages.find]
+include = ["intent_router*"]

@@ -1,0 +1,34 @@
+{
+  "boundary_sft": {
+    "file_name": "train.jsonl",
+    "file_sha256": null,
+    "columns": {
+      "prompt": "conversations",
+      "system": null
+    },
+    "tags": {
+      "role_tag": "from",
+      "content_tag": "value",
+      "user_tag": "user",
+      "assistant_tag": "assistant",
+      "system_tag": "system",
+      "tool_tag": "tool",
+      "observation_tag": "observation"
+    },
+    "formatting": "sharegpt"
+  },
+  "boundary_sft_val": {
+    "file_name": "val.jsonl",
+    "columns": {
+      "prompt": "conversations"
+    },
+    "tags": {
+      "role_tag": "from",
+      "content_tag": "value",
+      "user_tag": "user",
+      "assistant_tag": "assistant",
+      "system_tag": "system"
+    },
+    "formatting": "sharegpt"
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "model": "qwen3.5-35b-a3b",
+  "dataset": "eval/benchmark_v1.jsonl",
+  "dataset_sha256": "3e0508469f4ff0593835efe936ea578c94352131cb6cdc7360eb4815085e6691",
+  "cases": 560,
+  "runs": 560,
+  "system_correct": 556,
+  "system_accuracy": 0.992857,
+  "candidate_exact_correct": 504,
+  "candidate_exact_total": 560,
+  "candidate_exact_accuracy": 0.9,
+  "error_counts": {
+    "false_rejection": 4
+  },
+  "status_counts": {
+    "no_route": 284,
+    "routed": 276
+  },
+  "label_metrics": {
+    "SearchStockQuotes": {
+      "support": 140,
+      "predicted": 137,
+      "correct": 137,
+      "precision": 1.0,
+      "recall": 0.978571
+    },
+    "RecommendProduct": {
+      "support": 140,
+      "predicted": 139,
+      "correct": 139,
+      "precision": 1.0,
+      "recall": 0.992857
+    },
+    "null": {
+      "support": 280,
+      "predicted": 284,
+      "correct": 280,
+      "precision": 0.985915,
+      "recall": 1.0
+    }
+  },
+  "confusion": {
+    "RecommendProduct->RecommendProduct": 139,
+    "RecommendProduct->null": 1,
+    "SearchStockQuotes->SearchStockQuotes": 137,
+    "SearchStockQuotes->null": 3,
+    "null->null": 280
+  },
+  "split_metrics": {
+    "dev": {
+      "correct": 419,
+      "total": 420,
+      "accuracy": 0.997619
+    },
+    "test": {
+      "correct": 137,
+      "total": 140,
+      "accuracy": 0.978571
+    }
+  },
+  "bucket_metrics": {
+    "product_colloquial_asr": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "product_common_recommend": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "product_compare_choose": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "product_multiturn": {
+      "correct": 19,
+      "total": 20,
+      "accuracy": 0.95
+    },
+    "product_named_platform": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "product_search_link": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "product_tricky_object": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_ambiguous": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_chitchat": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_existing_order": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_general_task": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_multi_intent": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_non_ecommerce_object": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_other_finance": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_product_usage": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_prompt_distractor": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_services": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_stock_advice": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_stock_app_nonquery": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_stock_operations": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_stock_prediction": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "stock_current_quote": {
+      "correct": 19,
+      "total": 20,
+      "accuracy": 0.95
+    },
+    "stock_explanation_news": {
+      "correct": 19,
+      "total": 20,
+      "accuracy": 0.95
+    },
+    "stock_facts_concepts": {
+      "correct": 19,
+      "total": 20,
+      "accuracy": 0.95
+    },
+    "stock_history_chart": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "stock_market_index": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "stock_multiturn_info": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "stock_named_app_query": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    }
+  },
+  "completion_tokens": [
+    2,
+    3
+  ],
+  "latency_ms": {
+    "median": 282.625,
+    "p95": 357.192
+  }
+}

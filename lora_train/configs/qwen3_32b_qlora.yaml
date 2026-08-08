@@ -1,0 +1,98 @@
+# Qwen3-32B QLoRA SFT — 8x3090 (24GB) with DeepSpeed ZeRO-3
+#
+# Two-boundary intent classifier distilled from on-line Qwen3-32B outputs.
+# Input matches on-line distribution exactly:
+#   system = _STOCK_SYSTEM_PROMPT | _PRODUCT_SYSTEM_PROMPT (verbatim)
+#   user   = <conversation_json>{...}</conversation_json>\n输出谓词结果： /no_think
+#   assistant = one boundary id (StockRoute / NoProduct / ...)
+#
+# Run (LLaMA-Factory ≥ 0.9.x):
+#   FORCE_CUBLAS=1 llamafactory-cli train lora_train/configs/qwen3_32b_qlora.yaml
+#
+# TensorBoard:
+#   tensorboard --logdir lora_train/runs
+#
+# Notes:
+# - QLoRA: base in nf4 + double-quant, compute bf16, LoRA in bf16. flash-attn2 on.
+# - completion-only loss: only the assistant id token contributes to loss,
+#   which is ideal here because the target is a single id token.
+# - max_length 1024 is ample (system ~0.5k chars + user conversation_json).
+# - adjust per_device_batch and grad_accum so that effective_batch ≈ 64-128.
+
+### ---------------------------------------------------------------------
+### model
+### ---------------------------------------------------------------------
+model_name_or_path: Qwen/Qwen3-32B
+trust_remote_code: true
+quantization_bit: 4
+quantization_method: bitsandbytes
+double_quant: true
+quant_type: nf4
+
+### ---------------------------------------------------------------------
+### adapter
+### ---------------------------------------------------------------------
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_target: q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj
+lora_rank: 32
+lora_alpha: 64
+lora_dropout: 0.05
+lora_beta_logging: false
+use_rslora: false
+create_new_adapter: true
+
+### ---------------------------------------------------------------------
+### dataset
+### ---------------------------------------------------------------------
+dataset: boundary_sft
+dataset_dir: lora_train/dataset_info
+template: qwen3
+cutoff_len: 1024
+max_samples: 100000
+train_on_prompt: false        # mask system+user -> only assistant id counts
+completion_only_loss: true    # single-id target; this is the key flag
+overwrite_cache: true
+preprocessing_num_workers: 8
+
+### ---------------------------------------------------------------------
+### training
+### ---------------------------------------------------------------------
+output_dir: lora_train/runs/qwen3_32b_boundary_qlora
+overwrite_output_dir: true
+per_device_train_batch_size: 4
+per_device_eval_batch_size: 8
+gradient_accumulation_steps: 4   # 8 GPU x 4 x 4 = 128 effective batch
+learning_rate: 5.0e-5
+num_train_epochs: 3.0
+max_steps: -1
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+weight_decay: 0.0
+adam_beta1: 0.9
+adam_beta2: 0.95
+adam_epsilon: 1.0e-8
+max_grad_norm: 1.0
+logging_steps: 5
+save_steps: 200
+save_total_limit: 3
+eval_steps: 100
+eval_strategy: steps
+load_best_model_at_end: true
+metric_for_best_model: eval_loss
+greater_is_better: false
+plot_loss: true
+report_to: tensorboard
+seed: 42
+ddp_timeout: 180000000
+ddp_find_unused_parameters: false
+
+### ---------------------------------------------------------------------
+### compute / memory
+### ---------------------------------------------------------------------
+flash_attn: fa2
+gradient_checkpointing: true
+gradient_checkpointing_kwargs:
+  use_reentrant: false
+deepspeed: lora_train/configs/ds_zero3_offload.json

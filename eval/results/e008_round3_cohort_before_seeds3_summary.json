@@ -1,0 +1,97 @@
+{
+  "model": "qwen3.5-35b-a3b",
+  "dataset": "eval/benchmark_v1.jsonl",
+  "dataset_sha256": "bfb45ebc9ae29d500b2780e229e42dbfa2681192adc3c50bf6de592f3c57bc98",
+  "cases": 37,
+  "runs": 111,
+  "system_correct": 110,
+  "system_accuracy": 0.990991,
+  "candidate_exact_correct": 29,
+  "candidate_exact_total": 30,
+  "candidate_exact_accuracy": 0.966667,
+  "error_counts": {
+    "false_rejection": 1
+  },
+  "status_counts": {
+    "no_route": 82,
+    "routed": 29
+  },
+  "label_metrics": {
+    "SearchStockQuotes": {
+      "support": 12,
+      "predicted": 11,
+      "correct": 11,
+      "precision": 1.0,
+      "recall": 0.916667
+    },
+    "RecommendProduct": {
+      "support": 18,
+      "predicted": 18,
+      "correct": 18,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "null": {
+      "support": 81,
+      "predicted": 82,
+      "correct": 81,
+      "precision": 0.987805,
+      "recall": 1.0
+    }
+  },
+  "route_metrics": {
+    "positive": {
+      "correct": 29,
+      "total": 30,
+      "accuracy": 0.966667
+    },
+    "negative": {
+      "correct": 81,
+      "total": 81,
+      "accuracy": 1.0
+    }
+  },
+  "confusion": {
+    "RecommendProduct->RecommendProduct": 18,
+    "SearchStockQuotes->SearchStockQuotes": 11,
+    "SearchStockQuotes->null": 1,
+    "null->null": 81
+  },
+  "split_metrics": {
+    "regression": {
+      "correct": 110,
+      "total": 111,
+      "accuracy": 0.990991
+    }
+  },
+  "bucket_metrics": {
+    "production_regression_NoAvailable": {
+      "correct": 45,
+      "total": 45,
+      "accuracy": 1.0
+    },
+    "production_regression_SearchStockQuotes": {
+      "correct": 11,
+      "total": 12,
+      "accuracy": 0.916667
+    },
+    "production_regression_round2_NoAvailable": {
+      "correct": 36,
+      "total": 36,
+      "accuracy": 1.0
+    },
+    "production_regression_round2_RecommendProduct": {
+      "correct": 18,
+      "total": 18,
+      "accuracy": 1.0
+    }
+  },
+  "completion_tokens": [
+    2,
+    3
+  ],
+  "latency_ms": {
+    "median": 314.005,
+    "p95": 500.432
+  }
+}

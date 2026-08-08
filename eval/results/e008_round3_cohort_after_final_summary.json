@@ -1,0 +1,104 @@
+{
+  "model": "qwen3.5-35b-a3b",
+  "prompt_sha256s": [
+    "5ad3f3c28b651fb93c13482059cd99aee1eb6d0d35d466916dd87467d640fd1e",
+    "b92d3107bdd1d6bb8bbab548d2616c30494e231588ddd9a11c844aa0ec4c9381",
+    "f9214478287e380fd101273ddabf98a632215966c6bb11d2ec0709742b761dfe"
+  ],
+  "candidate_order_seeds": [
+    0,
+    1,
+    2
+  ],
+  "dataset": "eval/benchmark_v1.jsonl",
+  "dataset_sha256": "bfb45ebc9ae29d500b2780e229e42dbfa2681192adc3c50bf6de592f3c57bc98",
+  "cases": 37,
+  "runs": 333,
+  "system_correct": 333,
+  "system_accuracy": 1.0,
+  "candidate_exact_correct": 90,
+  "candidate_exact_total": 90,
+  "candidate_exact_accuracy": 1.0,
+  "error_counts": {},
+  "status_counts": {
+    "no_route": 243,
+    "routed": 90
+  },
+  "label_metrics": {
+    "SearchStockQuotes": {
+      "support": 36,
+      "predicted": 36,
+      "correct": 36,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "RecommendProduct": {
+      "support": 54,
+      "predicted": 54,
+      "correct": 54,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "null": {
+      "support": 243,
+      "predicted": 243,
+      "correct": 243,
+      "precision": 1.0,
+      "recall": 1.0
+    }
+  },
+  "route_metrics": {
+    "positive": {
+      "correct": 90,
+      "total": 90,
+      "accuracy": 1.0
+    },
+    "negative": {
+      "correct": 243,
+      "total": 243,
+      "accuracy": 1.0
+    }
+  },
+  "confusion": {
+    "RecommendProduct->RecommendProduct": 54,
+    "SearchStockQuotes->SearchStockQuotes": 36,
+    "null->null": 243
+  },
+  "split_metrics": {
+    "regression": {
+      "correct": 333,
+      "total": 333,
+      "accuracy": 1.0
+    }
+  },
+  "bucket_metrics": {
+    "production_regression_NoAvailable": {
+      "correct": 135,
+      "total": 135,
+      "accuracy": 1.0
+    },
+    "production_regression_SearchStockQuotes": {
+      "correct": 36,
+      "total": 36,
+      "accuracy": 1.0
+    },
+    "production_regression_round2_NoAvailable": {
+      "correct": 108,
+      "total": 108,
+      "accuracy": 1.0
+    },
+    "production_regression_round2_RecommendProduct": {
+      "correct": 54,
+      "total": 54,
+      "accuracy": 1.0
+    }
+  },
+  "completion_tokens": [
+    2,
+    3
+  ],
+  "latency_ms": {
+    "median": 318.641,
+    "p95": 516.647
+  }
+}

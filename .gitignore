@@ -1,0 +1,39 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# ---- 虚拟环境 ----
+.venv/
+venv/
+
+# ---- IDE / 工具 ----
+.idea/
+.vscode/
+.claude/
+
+# ---- 训练产物（大文件，不进 git）----
+lora_train/runs/
+lora_train/eval/
+*.safetensors
+*.bin
+adapter_model.bin
+checkpoint-*/
+*.log
+
+# ---- 训练数据集（可重新生成；冒烟小数据用 -f 强制纳入）----
+lora_train/dataset/*.jsonl
+
+# ---- 凭证/密钥（绝不能进 git）----
+*.env
+.env
+secrets.json
+*_api.txt
+bailian_api.txt
+
+# ---- OS ----
+.DS_Store
+Thumbs.db

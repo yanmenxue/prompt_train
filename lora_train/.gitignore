@@ -1,0 +1,33 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# ---- 训练产物（大文件，不进 git）----
+runs/                # checkpoint、tensorboard 日志
+*.safetensors
+*.bin
+adapter_model.bin
+checkpoint-*/
+eval/                # 评测结果
+*.log
+
+# ---- 数据集 ----
+# 训练集由 Qwen3.7-Plus 生成，体积大且可重新生成，不入库。
+# dataset_info.json 是配置，保留；jsonl 数据文件不保留。
+dataset/*.jsonl
+dataset/gen.log
+
+# ---- 凭证/密钥（绝不能进 git）----
+*.env
+.env
+secrets.json
+*_api.txt
+bailian_api.txt
+
+# ---- IDE / OS ----
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

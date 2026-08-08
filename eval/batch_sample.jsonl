@@ -1,0 +1,3 @@
+{"messages":[{"role":"system","content":"你是主Agent。"},{"role":"user","content":"查一下贵州茅台今天的股价"}]}
+{"messages":[{"role":"system","content":"你是主Agent。"},{"role":"user","content":"你好呀，很高兴见到你"}]}
+{"messages":[{"role":"user","content":"预算5000元，推荐一台适合写代码的笔记本"}]}

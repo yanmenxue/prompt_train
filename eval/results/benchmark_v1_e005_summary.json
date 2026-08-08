@@ -1,0 +1,78 @@
+{
+  "experiment": "E005",
+  "model": "qwen3-32b",
+  "dataset": "eval/benchmark_v1.jsonl",
+  "dataset_sha256": "3e0508469f4ff0593835efe936ea578c94352131cb6cdc7360eb4815085e6691",
+  "cases": 560,
+  "run_configuration": {
+    "temperature": 0,
+    "enable_thinking": false,
+    "max_tokens": null,
+    "candidate_order": "production_default",
+    "workers": 2,
+    "composition": "one clean dev run plus one clean test run"
+  },
+  "system_correct": 559,
+  "system_accuracy": 0.998214,
+  "error_counts": {
+    "unsafe_false_route": 1,
+    "false_rejection": 0,
+    "wrong_route": 0,
+    "operational_error": 0
+  },
+  "split_metrics": {
+    "dev": {
+      "correct": 420,
+      "total": 420,
+      "accuracy": 1.0
+    },
+    "test": {
+      "correct": 139,
+      "total": 140,
+      "accuracy": 0.992857
+    }
+  },
+  "label_metrics": {
+    "SearchStockQuotes": {
+      "support": 140,
+      "predicted": 140,
+      "correct": 140,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "RecommendProduct": {
+      "support": 140,
+      "predicted": 141,
+      "correct": 140,
+      "precision": 0.992908,
+      "recall": 1.0
+    },
+    "null": {
+      "support": 280,
+      "predicted": 279,
+      "correct": 279,
+      "precision": 1.0,
+      "recall": 0.996429
+    }
+  },
+  "confusion": {
+    "SearchStockQuotes->SearchStockQuotes": 140,
+    "RecommendProduct->RecommendProduct": 140,
+    "null->null": 279,
+    "null->RecommendProduct": 1
+  },
+  "completion_tokens": [
+    2,
+    3
+  ],
+  "latency_ms": {
+    "median": 254.581,
+    "p95": 361.965
+  },
+  "remaining_error": {
+    "id": "reject_non_ecommerce_object_020",
+    "expected_system_output": null,
+    "actual_system_output": "RecommendProduct",
+    "raw_model_output": "Ecommerce"
+  }
+}

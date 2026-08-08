@@ -1,0 +1,258 @@
+{
+  "model": "qwen3.5-35b-a3b",
+  "prompt_sha256s": [
+    "96259421ddbc610b2341b5bd818de3a7b596d429db53a6e0e5c54685718f8235"
+  ],
+  "candidate_order_seeds": [
+    0
+  ],
+  "dataset": "/home/doujzc/codes/PromptGen/eval/benchmark_v1.jsonl",
+  "dataset_sha256": "bfb45ebc9ae29d500b2780e229e42dbfa2681192adc3c50bf6de592f3c57bc98",
+  "cases": 672,
+  "runs": 672,
+  "system_correct": 671,
+  "system_accuracy": 0.998512,
+  "candidate_exact_correct": 538,
+  "candidate_exact_total": 599,
+  "candidate_exact_accuracy": 0.898164,
+  "error_counts": {
+    "false_rejection": 1
+  },
+  "status_counts": {
+    "no_route": 346,
+    "routed": 326
+  },
+  "label_metrics": {
+    "SearchStockQuotes": {
+      "support": 163,
+      "predicted": 162,
+      "correct": 162,
+      "precision": 1.0,
+      "recall": 0.993865
+    },
+    "RecommendProduct": {
+      "support": 164,
+      "predicted": 164,
+      "correct": 164,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "null": {
+      "support": 345,
+      "predicted": 346,
+      "correct": 345,
+      "precision": 0.99711,
+      "recall": 1.0
+    }
+  },
+  "route_metrics": {
+    "positive": {
+      "correct": 326,
+      "total": 327,
+      "accuracy": 0.996942
+    },
+    "negative": {
+      "correct": 345,
+      "total": 345,
+      "accuracy": 1.0
+    }
+  },
+  "confusion": {
+    "RecommendProduct->RecommendProduct": 164,
+    "SearchStockQuotes->SearchStockQuotes": 162,
+    "SearchStockQuotes->null": 1,
+    "null->null": 345
+  },
+  "split_metrics": {
+    "dev": {
+      "correct": 419,
+      "total": 420,
+      "accuracy": 0.997619
+    },
+    "regression": {
+      "correct": 112,
+      "total": 112,
+      "accuracy": 1.0
+    },
+    "test": {
+      "correct": 140,
+      "total": 140,
+      "accuracy": 1.0
+    }
+  },
+  "bucket_metrics": {
+    "product_colloquial_asr": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "product_common_recommend": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "product_compare_choose": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "product_multiturn": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "product_named_platform": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "product_search_link": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "product_tricky_object": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "production_regression_NoAvailable": {
+      "correct": 61,
+      "total": 61,
+      "accuracy": 1.0
+    },
+    "production_regression_RecommendProduct": {
+      "correct": 15,
+      "total": 15,
+      "accuracy": 1.0
+    },
+    "production_regression_SearchStockQuotes": {
+      "correct": 18,
+      "total": 18,
+      "accuracy": 1.0
+    },
+    "production_regression_round2_NoAvailable": {
+      "correct": 12,
+      "total": 12,
+      "accuracy": 1.0
+    },
+    "production_regression_round2_RecommendProduct": {
+      "correct": 6,
+      "total": 6,
+      "accuracy": 1.0
+    },
+    "reject_ambiguous": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_chitchat": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_existing_order": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_general_task": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_multi_intent": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_non_ecommerce_object": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_other_finance": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_product_usage": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_prompt_distractor": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_services": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_stock_advice": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_stock_app_nonquery": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_stock_operations": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "reject_stock_prediction": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "stock_current_quote": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "stock_explanation_news": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "stock_facts_concepts": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "stock_history_chart": {
+      "correct": 19,
+      "total": 20,
+      "accuracy": 0.95
+    },
+    "stock_market_index": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "stock_multiturn_info": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    },
+    "stock_named_app_query": {
+      "correct": 20,
+      "total": 20,
+      "accuracy": 1.0
+    }
+  },
+  "completion_tokens": [
+    2,
+    3
+  ],
+  "latency_ms": {
+    "median": 310.568,
+    "p95": 596.735
+  }
+}

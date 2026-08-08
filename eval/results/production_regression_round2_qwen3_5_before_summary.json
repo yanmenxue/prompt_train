@@ -1,0 +1,77 @@
+{
+  "model": "qwen3.5-35b-a3b",
+  "dataset": "eval/benchmark_v1.jsonl",
+  "dataset_sha256": "bfb45ebc9ae29d500b2780e229e42dbfa2681192adc3c50bf6de592f3c57bc98",
+  "cases": 18,
+  "runs": 18,
+  "system_correct": 7,
+  "system_accuracy": 0.388889,
+  "candidate_exact_correct": 4,
+  "candidate_exact_total": 6,
+  "candidate_exact_accuracy": 0.666667,
+  "error_counts": {
+    "false_rejection": 2,
+    "unsafe_false_route": 9
+  },
+  "status_counts": {
+    "no_route": 5,
+    "routed": 13
+  },
+  "label_metrics": {
+    "SearchStockQuotes": {
+      "support": 0,
+      "predicted": 6,
+      "correct": 0,
+      "precision": 0.0,
+      "recall": 0.0
+    },
+    "RecommendProduct": {
+      "support": 6,
+      "predicted": 7,
+      "correct": 4,
+      "precision": 0.571429,
+      "recall": 0.666667
+    },
+    "null": {
+      "support": 12,
+      "predicted": 5,
+      "correct": 3,
+      "precision": 0.6,
+      "recall": 0.25
+    }
+  },
+  "confusion": {
+    "RecommendProduct->RecommendProduct": 4,
+    "RecommendProduct->null": 2,
+    "null->RecommendProduct": 3,
+    "null->SearchStockQuotes": 6,
+    "null->null": 3
+  },
+  "split_metrics": {
+    "regression": {
+      "correct": 7,
+      "total": 18,
+      "accuracy": 0.388889
+    }
+  },
+  "bucket_metrics": {
+    "production_regression_round2_NoAvailable": {
+      "correct": 3,
+      "total": 12,
+      "accuracy": 0.25
+    },
+    "production_regression_round2_RecommendProduct": {
+      "correct": 4,
+      "total": 6,
+      "accuracy": 0.666667
+    }
+  },
+  "completion_tokens": [
+    2,
+    3
+  ],
+  "latency_ms": {
+    "median": 411.985,
+    "p95": 470.764
+  }
+}
