@@ -347,15 +347,12 @@ def main() -> None:
         from deepspeed import zero
 
         # zero.Init parses the DS config immediately, before HF Trainer has a
-        # chance to fill the "auto" placeholders. Resolve them now from the
-        # actual CLI args + world size so the batch assertion passes.
-        # zero.Init's config_dict_or_path accepts a dict OR a file path
-        # (verified against DS 0.19.4 signature); pass the resolved dict.
-        world_size = (
-            torch.distributed.get_world_size()
-            if torch.distributed.is_initialized()
-            else 1
-        )
+        # chance to fill the "auto" placeholders. DeepSpeedConfig's internal
+        # world_size is 1 at this point (dist world isn't registered in DS's
+        # comm layer yet), so train_batch_size must equal
+        # micro_batch * grad_acc * 1 (NOT * torch dist world_size) to pass the
+        # batch assertion. The real world_size=6 path runs later, when HF
+        # Trainer re-reads the file (args.deepspeed path) via accelerate.
         ds_config_dict = json.loads(
             Path(args.deepspeed).read_text(encoding="utf-8")
         )
@@ -363,7 +360,7 @@ def main() -> None:
         accum = args.grad_accum
         ds_config_dict["train_micro_batch_size_per_gpu"] = micro
         ds_config_dict["gradient_accumulation_steps"] = accum
-        ds_config_dict["train_batch_size"] = micro * accum * world_size
+        ds_config_dict["train_batch_size"] = micro * accum  # DS sees world_size=1 here
 
         model_kwargs["low_cpu_mem_usage"] = True
         with zero.Init(config_dict_or_path=ds_config_dict):
