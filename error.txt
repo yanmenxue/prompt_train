@@ -1,8 +1,2 @@
-import urllib.request, json, ssl                                                                                                                               
-ctx = ssl.create_default_context(); ctx.check_hostname=False; ctx.verify_mode=ssl.CERT_NONE                                                                    
-url='https://api.github.com/repos/huggingface/transformers/contents/src/transformers/models/qwen3?ref=main'                                                    
-try:                                                                                                                                                           
-  d=json.load(urllib.request.urlopen(url, context=ctx))                                                                                                      
-  print('files:', [f['name'] for f in d])                                                                                                                    
-except Exception as e:                                                                                                                                         
-  print('err:', e)      
+(python12) root@poissongpu006:~/code# python test.py
+files: ['__init__.py', 'configuration_qwen3.py', 'modeling_qwen3.py', 'modular_qwen3.py']
