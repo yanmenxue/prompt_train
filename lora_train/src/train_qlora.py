@@ -110,7 +110,12 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--val_file", default="lora_train/dataset/val.jsonl")
     p.add_argument("--output_dir", default="lora_train/runs/qwen3_32b_boundary_qlora")
     p.add_argument("--deepspeed", default=None, help="path to ds config; set None to disable")
-    p.add_argument("--max_length", type=int, default=384, help="seq len cap; boundary samples are ~250-350 tokens, 384 suffices")
+    p.add_argument(
+        "--max_length",
+        type=int,
+        default=512,
+        help="seq len cap; boundary samples tokenize to ~330-380 tokens (system ~270 + user ~80 + assistant ~3 + special). 512 covers them with margin; custom compute_loss keeps the fp32-logits OOM away regardless of length.",
+    )
     p.add_argument("--max_samples", type=int, default=None, help="cap dataset size for smoke tests")
     p.add_argument("--per_device_batch", type=int, default=1)
     p.add_argument("--grad_accum", type=int, default=4)
