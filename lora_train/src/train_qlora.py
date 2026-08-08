@@ -295,10 +295,15 @@ def main() -> None:
         torch.cuda.set_device(local_rank)
         if not dist.is_initialized():
             dist.init_process_group(backend="nccl")
-
-        # TEMP DEBUG: probe DS comm layer world_size vs torch's.
+        # DeepSpeed has its OWN comm layer, separate from torch.distributed.
+        # If we don't init it, DSConfig.world_size falls back to 1 and
+        # zero.Init partitions as if world_size==1 -> no sharding -> OOM.
+        # init_distributed() hooks DS's comm onto the torch PG we just made.
         import deepspeed.comm as ds_comm
 
+        ds_comm.init_distributed()
+
+        # TEMP DEBUG: confirm DS comm layer now sees world_size=6.
         ds_ws = ds_comm.get_world_size()
         torch_ws = dist.get_world_size()
         print(
@@ -358,12 +363,15 @@ def main() -> None:
         from deepspeed import zero
 
         # zero.Init parses the DS config immediately, before HF Trainer has a
-        # chance to fill the "auto" placeholders. DeepSpeedConfig's internal
-        # world_size is 1 at this point (dist world isn't registered in DS's
-        # comm layer yet), so train_batch_size must equal
-        # micro_batch * grad_acc * 1 (NOT * torch dist world_size) to pass the
-        # batch assertion. The real world_size=6 path runs later, when HF
-        # Trainer re-reads the file (args.deepspeed path) via accelerate.
+        # chance to fill the "auto" placeholders. Now that deepspeed.comm.
+        # init_distributed() has wired DS's comm layer onto the torch PG,
+        # DSConfig.world_size reads the real value (6), so train_batch_size
+        # must equal micro * grad_acc * world_size to pass the assertion.
+        world_size = (
+            torch.distributed.get_world_size()
+            if torch.distributed.is_initialized()
+            else 1
+        )
         ds_config_dict = json.loads(
             Path(args.deepspeed).read_text(encoding="utf-8")
         )
@@ -371,7 +379,7 @@ def main() -> None:
         accum = args.grad_accum
         ds_config_dict["train_micro_batch_size_per_gpu"] = micro
         ds_config_dict["gradient_accumulation_steps"] = accum
-        ds_config_dict["train_batch_size"] = micro * accum  # DS sees world_size=1 here
+        ds_config_dict["train_batch_size"] = micro * accum * world_size
 
         model_kwargs["low_cpu_mem_usage"] = True
         with zero.Init(config_dict_or_path=ds_config_dict):
