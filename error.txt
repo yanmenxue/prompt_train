@@ -1,56 +1,8 @@
-(python12) root@poissongpu006:/disk1/duhw/code/prompt_train# PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True   CUDA_VISIBLE_DEVICES=2,3,4,5,6,7   deepspeed --num_gpus=6 lora_train/src/train_qlora.py       --max_steps 20 --max_samples 16       --per_device_batch 1 --grad_accum 1       --model_name ../../models/Qwen3_32B/       --attn_impl sdpa       --deepspeed lora_train/configs/ds_zero3_offload.json
-[2026-08-08 22:59:02,988] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
-Detected VISIBLE_DEVICES=2,3,4,5,6,7 but ignoring it because one or several of --include/--exclude/--num_gpus/--num_nodes cl args were used. If you want to use CUDA_VISIBLE_DEVICES don't pass any of these arguments to deepspeed.
-[2026-08-08 22:59:02,988] [INFO] [runner.py:630:main] cmd = /root/anaconda3/envs/python12/bin/python3.12 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMSwgMiwgMywgNCwgNV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info lora_train/src/train_qlora.py --max_steps 20 --max_samples 16 --per_device_batch 1 --grad_accum 1 --model_name ../../models/Qwen3_32B/ --attn_impl sdpa --deepspeed lora_train/configs/ds_zero3_offload.json
-[2026-08-08 22:59:09,382] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [0, 1, 2, 3, 4, 5]}
-[2026-08-08 22:59:09,382] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=6, node_rank=0
-[2026-08-08 22:59:09,382] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5]})
-[2026-08-08 22:59:09,383] [INFO] [launch.py:180:main] dist_world_size=6
-[2026-08-08 22:59:09,383] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=0,1,2,3,4,5
-[2026-08-08 22:59:09,383] [INFO] [launch.py:272:main] process 2003608 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=0', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-08 22:59:09,384] [INFO] [launch.py:272:main] process 2003609 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=1', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-08 22:59:09,385] [INFO] [launch.py:272:main] process 2003610 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=2', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-08 22:59:09,385] [INFO] [launch.py:272:main] process 2003611 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=3', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-08 22:59:09,386] [INFO] [launch.py:272:main] process 2003612 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=4', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-08 22:59:09,386] [INFO] [launch.py:272:main] process 2003613 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 5512.19it/s]
-Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 6030.06it/s]
-Loading weights: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 12242.58it/s]
-Loading weights: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 10602.43it/s]
-Loading weights: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 21814.48it/s]
-Loading weights: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 28198.68it/s]
-trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-Map:   0%|                                                                                                                                                                                                                                                | 0/16 [00:00<?, ? examples/s]trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 210.27 examples/s]
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 158.04 examples/s]
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 209.32 examples/s]
-trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 192.01 examples/s]
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
-trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 311.02 examples/s]
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 314.18 examples/s]
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 326.35 examples/s]
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 346.72 examples/s]
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 223.53 examples/s]
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 205.35 examples/s]
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 223.99 examples/s]
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 193.27 examples/s]
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
-[2026-08-08 23:00:03,398] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2003608
-[2026-08-08 23:00:03,668] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2003609
-[2026-08-08 23:00:03,705] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2003610
-[2026-08-08 23:00:03,735] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2003611
-[2026-08-08 23:00:03,755] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2003612
-[2026-08-08 23:00:03,755] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2003613
-[2026-08-08 23:00:03,771] [ERROR] [launch.py:341:sigkill_handler] ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = -11
-(python12) root@poissongpu006:/disk1/duhw/code/prompt_train# grep "local_rank" lora_train/src/train_qlora.py
-    # deepspeed/torchrun launcher passes --local_rank (or --local-rank) to
-    p.add_argument("--local_rank", type=int, default=-1)
-    p.add_argument("--local-rank", dest="local_rank_dash", type=int, default=-1)
+ PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+  CUDA_VISIBLE_DEVICES=2,3,4,5,6,7 \
+  deepspeed lora_train/src/train_qlora.py \
+      --max_steps 20 --max_samples 16 \
+      --per_device_batch 1 --grad_accum 1 \
+      --model_name ../../models/Qwen3_32B/ \
+      --attn_impl sdpa \
+      --deepspeed lora_train/configs/ds_zero3_offload.json
