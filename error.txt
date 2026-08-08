@@ -1,3 +1,23 @@
-   curl -s --max-time 15 "https://api.github.com/repos/huggingface/transformers/commits?path=src/transformers/models/qwen3/modeling_qwen3.py&per_page=3" | python 
-  -c "import sys,json; d=json.load(sys.stdin); [print(c['sha'][:8], c['commit']['author']['date'], c['commit']['message'].split(chr(10))[0]) for c in d]" 2>&1 | 
-  head -10
+import sys
+import json
+import urllib.request
+import ssl  # 导入 ssl 模块
+
+# 1. 创建一个不验证证书的 SSL 上下文
+ssl_context = ssl.create_default_context()
+ssl_context.check_hostname = False
+ssl_context.verify_mode = ssl.CERT_NONE
+
+url = 'https://api.github.com/repos/huggingface/transformers/commits?path=src/transformers/models/qwen3/modeling_qwen3.py&per_page=3'
+
+# 2. 在 urlopen 中传入 context 参数
+with urllib.request.urlopen(url, context=ssl_context) as response:
+    d = json.load(response)
+    for c in d:
+        print(c["sha"][:8], c["commit"]["author"]["date"], c["commit"]["message"].split("\n")[0])
+
+(python12) root@poissongpu006:~/code# vi /tmp/get_commits.py
+(python12) root@poissongpu006:~/code# python /tmp/get_commits.py | head -10
+ff2421c6 2026-08-04T02:32:49Z Remove useless linting for inv_freq (#47753)
+d6abd133 2026-08-04T01:16:02Z Use explicit nn.Buffer everywhere for modular (#47722)
+6b8369fe 2026-07-30T11:09:08Z Remove Rotary warning (#47642)
