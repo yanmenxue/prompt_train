@@ -34,6 +34,7 @@ from pathlib import Path
 from typing import Any
 
 import torch
+from accelerate import init_empty_weights
 from datasets import Dataset
 from peft import LoraConfig, TaskType, get_peft_model
 from transformers import (
@@ -313,7 +314,19 @@ def main() -> None:
             bnb_4bit_compute_dtype=torch.bfloat16,
             bnb_4bit_quant_storage=torch.uint8,
         )
-    model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
+    # ZeRO-3: build the module on the meta device and let DeepSpeed shard-load
+    # each rank's slice on demand. from_pretrained on a real device loads the
+    # FULL bf16 weights onto EVERY rank (~64GB each for a 32B base), filling
+    # the card before ZeRO-3 can shard -> OOM at
+    # DeepSpeedEngine._configure_distributed_model's .to(). With
+    # init_empty_weights the module is meta placeholders (0 bytes), and the
+    # DeepSpeed engine materializes per-rank shards during init.
+    if args.deepspeed:
+        model_kwargs["low_cpu_mem_usage"] = True
+        with init_empty_weights():
+            model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
+    else:
+        model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
     model.config.use_cache = False
     if hasattr(model, "gradient_checkpointing_enable"):
         model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
