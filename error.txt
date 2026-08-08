@@ -1,197 +1,361 @@
-(python12) root@poissongpu006:/disk1/duhw/code/prompt_train# NCCL_IB_DISABLE=1   CUDA_VISIBLE_DEVICES=2,3,4,5,6,7   deepspeed lora_train/src/train_qlora.py       --max_steps 20 --max_samples 16       --per_device_batch 1 --grad_accum 1       --model_name ../../models/Qwen3_32B/       --attn_impl sdpa       --deepspeed lora_train/configs/ds_zero3_offload.json
-[2026-08-09 00:44:26,826] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+((python12) root@poissongpu006:/disk1/duhw/code/prompt_train# NCCL_IB_DISABLE=1   CUDA_VISIBLE_DEVICES=2,3,4,5,6,7   deepspeed lora_train/src/train_qlora.py       --max_steps 20 --max_samples 16       --per_device_batch 1 --grad_accum 1       --model_name ../../models/Qwen3_32B/       --attn_impl sdpa       --deepspeed lora_train/configs/ds_zero3_offload.json
+[2026-08-09 00:48:25,075] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
 Detected VISIBLE_DEVICES=2,3,4,5,6,7: setting --include=localhost:2,3,4,5,6,7
-[2026-08-09 00:44:26,826] [INFO] [runner.py:630:main] cmd = /root/anaconda3/envs/python12/bin/python3.12 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMiwgMywgNCwgNSwgNiwgN119 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info lora_train/src/train_qlora.py --max_steps 20 --max_samples 16 --per_device_batch 1 --grad_accum 1 --model_name ../../models/Qwen3_32B/ --attn_impl sdpa --deepspeed lora_train/configs/ds_zero3_offload.json
-[2026-08-09 00:44:33,158] [INFO] [launch.py:155:main] 0 NCCL_IB_DISABLE=1
-[2026-08-09 00:44:33,158] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [2, 3, 4, 5, 6, 7]}
-[2026-08-09 00:44:33,158] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=6, node_rank=0
-[2026-08-09 00:44:33,158] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5]})
-[2026-08-09 00:44:33,158] [INFO] [launch.py:180:main] dist_world_size=6
-[2026-08-09 00:44:33,158] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=2,3,4,5,6,7
-[2026-08-09 00:44:33,159] [INFO] [launch.py:272:main] process 2038653 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=0', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-09 00:44:33,159] [INFO] [launch.py:272:main] process 2038654 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=1', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-09 00:44:33,160] [INFO] [launch.py:272:main] process 2038655 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=2', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-09 00:44:33,160] [INFO] [launch.py:272:main] process 2038656 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=3', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-09 00:44:33,161] [INFO] [launch.py:272:main] process 2038657 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=4', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-09 00:44:33,162] [INFO] [launch.py:272:main] process 2038658 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[debug rank2] torch_world_size=6 ds_comm_world_size=6
-[debug rank4] torch_world_size=6 ds_comm_world_size=6
-[debug rank1] torch_world_size=6 ds_comm_world_size=6
-[debug rank3] torch_world_size=6 ds_comm_world_size=6
-[debug rank0] torch_world_size=6 ds_comm_world_size=6
-[debug rank5] torch_world_size=6 ds_comm_world_size=6
-[rank0]: Traceback (most recent call last):
-[rank0]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 490, in <module>
-[rank0]:     main()
-[rank0]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 386, in main
-[rank0]:     model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-[rank0]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 406, in from_pretrained
-[rank0]:     return model_class.from_pretrained(
-[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4283, in from_pretrained
-[rank0]:     model = cls(config, *model_args, **model_kwargs)
-[rank0]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 546, in wrapper
-[rank0]:     f(module, *args, **kwargs)
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 451, in __init__
-[rank0]:     self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
-[rank0]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 546, in wrapper
-[rank0]:     f(module, *args, **kwargs)
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/linear.py", line 109, in __init__
-[rank0]:     torch.empty((out_features, in_features), **factory_kwargs)
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 259, in wrapped_fn
-[rank0]:     tensor.data = tensor.data.to(target_fp_dtype)
-[rank0]:                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/utils/_device.py", line 116, in __torch_function__
-[rank0]:     return func(*args, **kwargs)
-[rank0]:            ^^^^^^^^^^^^^^^^^^^^^
-[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.90 GiB. GPU 0 has a total capacity of 23.56 GiB of which 760.81 MiB is free. Including non-PyTorch memory, this process has 22.81 GiB memory in use. Of the allocated memory 21.31 GiB is allocated by PyTorch, and 1.09 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
-[rank2]: Traceback (most recent call last):
-[rank2]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 490, in <module>
-[rank2]:     main()
-[rank2]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 386, in main
-[rank2]:     model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-[rank2]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 406, in from_pretrained
-[rank2]:     return model_class.from_pretrained(
-[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4283, in from_pretrained
-[rank2]:     model = cls(config, *model_args, **model_kwargs)
-[rank2]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 546, in wrapper
-[rank2]:     f(module, *args, **kwargs)
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 451, in __init__
-[rank2]:     self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
-[rank2]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 546, in wrapper
-[rank2]:     f(module, *args, **kwargs)
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/linear.py", line 109, in __init__
-[rank2]:     torch.empty((out_features, in_features), **factory_kwargs)
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 259, in wrapped_fn
-[rank2]:     tensor.data = tensor.data.to(target_fp_dtype)
-[rank2]:                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/utils/_device.py", line 116, in __torch_function__
-[rank2]:     return func(*args, **kwargs)
-[rank2]:            ^^^^^^^^^^^^^^^^^^^^^
-[rank2]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.90 GiB. GPU 2 has a total capacity of 23.56 GiB of which 760.94 MiB is free. Including non-PyTorch memory, this process has 22.81 GiB memory in use. Of the allocated memory 21.31 GiB is allocated by PyTorch, and 1.09 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
-[rank1]: Traceback (most recent call last):
-[rank1]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 490, in <module>
-[rank1]:     main()
-[rank1]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 386, in main
-[rank1]:     model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-[rank1]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 406, in from_pretrained
-[rank1]:     return model_class.from_pretrained(
-[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4283, in from_pretrained
-[rank1]:     model = cls(config, *model_args, **model_kwargs)
-[rank1]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 546, in wrapper
-[rank1]:     f(module, *args, **kwargs)
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 451, in __init__
-[rank1]:     self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
-[rank1]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 546, in wrapper
-[rank1]:     f(module, *args, **kwargs)
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/linear.py", line 109, in __init__
-[rank1]:     torch.empty((out_features, in_features), **factory_kwargs)
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 259, in wrapped_fn
-[rank1]:     tensor.data = tensor.data.to(target_fp_dtype)
-[rank1]:                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/utils/_device.py", line 116, in __torch_function__
-[rank1]:     return func(*args, **kwargs)
-[rank1]:            ^^^^^^^^^^^^^^^^^^^^^
-[rank1]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.90 GiB. GPU 1 has a total capacity of 23.56 GiB of which 760.94 MiB is free. Including non-PyTorch memory, this process has 22.81 GiB memory in use. Of the allocated memory 21.31 GiB is allocated by PyTorch, and 1.09 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[2026-08-09 00:48:25,075] [INFO] [runner.py:630:main] cmd = /root/anaconda3/envs/python12/bin/python3.12 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMiwgMywgNCwgNSwgNiwgN119 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info lora_train/src/train_qlora.py --max_steps 20 --max_samples 16 --per_device_batch 1 --grad_accum 1 --model_name ../../models/Qwen3_32B/ --attn_impl sdpa --deepspeed lora_train/configs/ds_zero3_offload.json
+[2026-08-09 00:48:31,472] [INFO] [launch.py:155:main] 0 NCCL_IB_DISABLE=1
+[2026-08-09 00:48:31,472] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [2, 3, 4, 5, 6, 7]}
+[2026-08-09 00:48:31,472] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=6, node_rank=0
+[2026-08-09 00:48:31,472] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5]})
+[2026-08-09 00:48:31,472] [INFO] [launch.py:180:main] dist_world_size=6
+[2026-08-09 00:48:31,472] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=2,3,4,5,6,7
+[2026-08-09 00:48:31,473] [INFO] [launch.py:272:main] process 2040963 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=0', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:48:31,474] [INFO] [launch.py:272:main] process 2040964 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=1', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:48:31,474] [INFO] [launch.py:272:main] process 2040965 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=2', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:48:31,475] [INFO] [launch.py:272:main] process 2040966 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=3', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:48:31,476] [INFO] [launch.py:272:main] process 2040967 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=4', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:48:31,476] [INFO] [launch.py:272:main] process 2040968 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 6676.38it/s]
+Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 7435.91it/s]
+Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 6048.84it/s]
+Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 5437.22it/s]
+Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 5652.49it/s]
+Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 6384.46it/s]
+trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
+trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
+trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
+trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
+trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
+trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
+Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 333.74 examples/s]
+Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 324.33 examples/s]
+Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 340.51 examples/s]
+Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 323.60 examples/s]
+Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 317.04 examples/s]
+Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 308.99 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 230.71 examples/s]
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 223.34 examples/s]
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 222.09 examples/s]
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 219.13 examples/s]
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 209.63 examples/s]
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 227.21 examples/s]
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
 [rank3]: Traceback (most recent call last):
-[rank3]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 490, in <module>
+[rank3]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 443, in <module>
 [rank3]:     main()
-[rank3]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 386, in main
-[rank3]:     model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-[rank3]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 406, in from_pretrained
-[rank3]:     return model_class.from_pretrained(
-[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4283, in from_pretrained
-[rank3]:     model = cls(config, *model_args, **model_kwargs)
-[rank3]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 546, in wrapper
-[rank3]:     f(module, *args, **kwargs)
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 451, in __init__
-[rank3]:     self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
-[rank3]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 546, in wrapper
-[rank3]:     f(module, *args, **kwargs)
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/linear.py", line 109, in __init__
-[rank3]:     torch.empty((out_features, in_features), **factory_kwargs)
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 259, in wrapped_fn
-[rank3]:     tensor.data = tensor.data.to(target_fp_dtype)
-[rank3]:                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/utils/_device.py", line 116, in __torch_function__
-[rank3]:     return func(*args, **kwargs)
-[rank3]:            ^^^^^^^^^^^^^^^^^^^^^
-[rank3]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.90 GiB. GPU 3 has a total capacity of 23.56 GiB of which 760.94 MiB is free. Including non-PyTorch memory, this process has 22.81 GiB memory in use. Of the allocated memory 21.31 GiB is allocated by PyTorch, and 1.09 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[rank3]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 436, in main
+[rank3]:     trainer.train()
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
+[rank3]:     return inner_training_loop(
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1472, in _inner_training_loop
+[rank3]:     model, train_dataloader = self._prepare_for_training(max_steps, train_dataloader, resume_from_checkpoint)
+[rank3]:                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1604, in _prepare_for_training
+[rank3]:     model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
+[rank3]:                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 1549, in prepare
+[rank3]:     result = self._prepare_deepspeed(*args)
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 2439, in _prepare_deepspeed
+[rank3]:     engine, optimizer, _, lr_scheduler = ds_initialize(**kwargs)
+[rank3]:                                          ^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/__init__.py", line 229, in initialize
+[rank3]:     engine = DeepSpeedEngine(args=args,
+[rank3]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 338, in __init__
+[rank3]:     self._configure_distributed_model(model)
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1719, in _configure_distributed_model
+[rank3]:     self.module.to(self.device)
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1384, in to
+[rank3]:     return self._apply(convert)
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank3]:     module._apply(fn)
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank3]:     module._apply(fn)
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank3]:     module._apply(fn)
+[rank3]:   [Previous line repeated 5 more times]
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 965, in _apply
+[rank3]:     param_applied = fn(param)
+[rank3]:                     ^^^^^^^^^
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1370, in convert
+[rank3]:     return t.to(
+[rank3]:            ^^^^^
+[rank3]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 250.00 MiB. GPU 3 has a total capacity of 23.56 GiB of which 224.94 MiB is free. Including non-PyTorch memory, this process has 23.33 GiB memory in use. Of the allocated memory 22.95 GiB is allocated by PyTorch, and 8.40 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 443, in <module>
+[rank0]:     main()
+[rank0]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 436, in main
+[rank0]:     trainer.train()
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
+[rank0]:     return inner_training_loop(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1472, in _inner_training_loop
+[rank0]:     model, train_dataloader = self._prepare_for_training(max_steps, train_dataloader, resume_from_checkpoint)
+[rank0]:                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1604, in _prepare_for_training
+[rank0]:     model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
+[rank0]:                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 1549, in prepare
+[rank0]:     result = self._prepare_deepspeed(*args)
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 2439, in _prepare_deepspeed
+[rank0]:     engine, optimizer, _, lr_scheduler = ds_initialize(**kwargs)
+[rank0]:                                          ^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/__init__.py", line 229, in initialize
+[rank0]:     engine = DeepSpeedEngine(args=args,
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 338, in __init__
+[rank0]:     self._configure_distributed_model(model)
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1719, in _configure_distributed_model
+[rank0]:     self.module.to(self.device)
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1384, in to
+[rank0]:     return self._apply(convert)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank0]:     module._apply(fn)
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank0]:     module._apply(fn)
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank0]:     module._apply(fn)
+[rank0]:   [Previous line repeated 5 more times]
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 965, in _apply
+[rank0]:     param_applied = fn(param)
+[rank0]:                     ^^^^^^^^^
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1370, in convert
+[rank0]:     return t.to(
+[rank0]:            ^^^^^
+[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 250.00 MiB. GPU 0 has a total capacity of 23.56 GiB of which 224.81 MiB is free. Including non-PyTorch memory, this process has 23.33 GiB memory in use. Of the allocated memory 22.95 GiB is allocated by PyTorch, and 8.40 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[2026-08-09 00:49:54,489] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2040963
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 443, in <module>
+[rank1]:     main()
+[rank1]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 436, in main
+[rank1]:     trainer.train()
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
+[rank1]:     return inner_training_loop(
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1472, in _inner_training_loop
+[rank1]:     model, train_dataloader = self._prepare_for_training(max_steps, train_dataloader, resume_from_checkpoint)
+[rank1]:                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1604, in _prepare_for_training
+[rank1]:     model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
+[rank1]:                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 1549, in prepare
+[rank1]:     result = self._prepare_deepspeed(*args)
+[rank1]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 2439, in _prepare_deepspeed
+[rank1]:     engine, optimizer, _, lr_scheduler = ds_initialize(**kwargs)
+[rank1]:                                          ^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/__init__.py", line 229, in initialize
+[rank1]:     engine = DeepSpeedEngine(args=args,
+[rank1]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 338, in __init__
+[rank1]:     self._configure_distributed_model(model)
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1719, in _configure_distributed_model
+[rank1]:     self.module.to(self.device)
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1384, in to
+[rank1]:     return self._apply(convert)
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank1]:     module._apply(fn)
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank1]:     module._apply(fn)
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank1]:     module._apply(fn)
+[rank1]:   [Previous line repeated 5 more times]
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 965, in _apply
+[rank1]:     param_applied = fn(param)
+[rank1]:                     ^^^^^^^^^
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1370, in convert
+[rank1]:     return t.to(
+[rank1]:            ^^^^^
+[rank1]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 250.00 MiB. GPU 1 has a total capacity of 23.56 GiB of which 224.94 MiB is free. Including non-PyTorch memory, this process has 23.33 GiB memory in use. Of the allocated memory 22.95 GiB is allocated by PyTorch, and 8.40 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[rank2]:[W809 00:49:54.912127082 TCPStore.cpp:125] [c10d] recvValue failed on SocketImpl(fd=40, addr=[localhost]:42000, remote=[localhost]:29500): Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+Exception raised from recvBytes at /pytorch/torch/csrc/distributed/c10d/Utils.hpp:682 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x9d (0x7f64b557305d in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x6a914bd (0x7f6434da54bd in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #2: c10d::TCPStore::check(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) + 0x273 (0x7f6434da3413 in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #3: c10d::ProcessGroupNCCL::HeartbeatMonitor::runLoop() + 0x4a5 (0x7f641758f8c5 in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: <unknown function> + 0xec064 (0x7f64b5079064 in /lib/x86_64-linux-gnu/libstdc++.so.6)
+frame #5: <unknown function> + 0x94ac3 (0x7f64f5f60ac3 in /lib/x86_64-linux-gnu/libc.so.6)
+frame #6: <unknown function> + 0x1268d0 (0x7f64f5ff28d0 in /lib/x86_64-linux-gnu/libc.so.6)
+
+[rank2]:[W809 00:49:54.918280628 ProcessGroupNCCL.cpp:1826] [PG ID 0 PG GUID 0(default_pg) Rank 2] Failed to check the "should dump" flag on TCPStore, (maybe TCPStore server has shut down too early), with error: Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+[rank4]:[W809 00:49:54.912119526 TCPStore.cpp:125] [c10d] recvValue failed on SocketImpl(fd=40, addr=[localhost]:41996, remote=[localhost]:29500): Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+Exception raised from recvBytes at /pytorch/torch/csrc/distributed/c10d/Utils.hpp:682 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x9d (0x7fc0ab37305d in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x6a914bd (0x7fc02aba54bd in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #2: c10d::TCPStore::check(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) + 0x273 (0x7fc02aba3413 in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #3: c10d::ProcessGroupNCCL::HeartbeatMonitor::runLoop() + 0x4a5 (0x7fc00d38f8c5 in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: <unknown function> + 0xec064 (0x7fc0aae79064 in /lib/x86_64-linux-gnu/libstdc++.so.6)
+frame #5: <unknown function> + 0x94ac3 (0x7fc0ebc72ac3 in /lib/x86_64-linux-gnu/libc.so.6)
+frame #6: <unknown function> + 0x1268d0 (0x7fc0ebd048d0 in /lib/x86_64-linux-gnu/libc.so.6)
+
+[rank4]:[W809 00:49:54.918488304 ProcessGroupNCCL.cpp:1826] [PG ID 0 PG GUID 0(default_pg) Rank 4] Failed to check the "should dump" flag on TCPStore, (maybe TCPStore server has shut down too early), with error: Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+[rank1]:[W809 00:49:54.946666893 TCPStore.cpp:125] [c10d] recvValue failed on SocketImpl(fd=40, addr=[localhost]:42008, remote=[localhost]:29500): Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+Exception raised from recvBytes at /pytorch/torch/csrc/distributed/c10d/Utils.hpp:682 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x9d (0x7f8bed97305d in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x6a914bd (0x7f8b2dba54bd in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #2: c10d::TCPStore::check(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) + 0x273 (0x7f8b2dba3413 in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #3: c10d::ProcessGroupNCCL::HeartbeatMonitor::runLoop() + 0x4a5 (0x7f8b1038f8c5 in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: <unknown function> + 0xec064 (0x7f8bade79064 in /lib/x86_64-linux-gnu/libstdc++.so.6)
+frame #5: <unknown function> + 0x94ac3 (0x7f8beedabac3 in /lib/x86_64-linux-gnu/libc.so.6)
+frame #6: <unknown function> + 0x1268d0 (0x7f8beee3d8d0 in /lib/x86_64-linux-gnu/libc.so.6)
+
+[rank1]:[W809 00:49:54.952638638 ProcessGroupNCCL.cpp:1826] [PG ID 0 PG GUID 0(default_pg) Rank 1] Failed to check the "should dump" flag on TCPStore, (maybe TCPStore server has shut down too early), with error: Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+[2026-08-09 00:49:54,869] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2040964
+[rank5]:[W809 00:49:54.043137955 TCPStore.cpp:125] [c10d] recvValue failed on SocketImpl(fd=50, addr=[localhost]:42036, remote=[localhost]:29500): Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
+Exception raised from recvBytes at /pytorch/torch/csrc/distributed/c10d/Utils.hpp:682 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) + 0x9d (0x7fbdc5f7305d in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libc10.so)
+frame #1: <unknown function> + 0x6a914bd (0x7fbd457a54bd in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #2: c10d::TCPStore::check(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) + 0x273 (0x7fbd457a3413 in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libtorch_cpu.so)
+frame #3: c10d::ProcessGroupNCCL::HeartbeatMonitor::runLoop() + 0x4a5 (0x7fbd27f8f8c5 in /root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/lib/libtorch_cuda.so)
+frame #4: <unknown function> + 0xec064 (0x7fbdc5a79064 in /lib/x86_64-linux-gnu/libstdc++.so.6)
+frame #5: <unknown function> + 0x94ac3 (0x7fbe06923ac3 in /lib/x86_64-linux-gnu/libc.so.6)
+frame #6: <unknown function> + 0x1268d0 (0x7fbe069b58d0 in /lib/x86_64-linux-gnu/libc.so.6)
+
+[rank5]:[W809 00:49:54.045985398 ProcessGroupNCCL.cpp:1826] [PG ID 0 PG GUID 0(default_pg) Rank 5] Failed to check the "should dump" flag on TCPStore, (maybe TCPStore server has shut down too early), with error: Failed to recv, got 0 bytes. Connection was likely closed. Did the remote server shutdown or crash?
 [rank5]: Traceback (most recent call last):
-[rank5]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 490, in <module>
+[rank5]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 443, in <module>
 [rank5]:     main()
-[rank5]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 386, in main
-[rank5]:     model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-[rank5]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 406, in from_pretrained
-[rank5]:     return model_class.from_pretrained(
-[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4283, in from_pretrained
-[rank5]:     model = cls(config, *model_args, **model_kwargs)
-[rank5]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 546, in wrapper
-[rank5]:     f(module, *args, **kwargs)
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 451, in __init__
-[rank5]:     self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
-[rank5]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 546, in wrapper
-[rank5]:     f(module, *args, **kwargs)
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/linear.py", line 109, in __init__
-[rank5]:     torch.empty((out_features, in_features), **factory_kwargs)
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 259, in wrapped_fn
-[rank5]:     tensor.data = tensor.data.to(target_fp_dtype)
-[rank5]:                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/utils/_device.py", line 116, in __torch_function__
-[rank5]:     return func(*args, **kwargs)
-[rank5]:            ^^^^^^^^^^^^^^^^^^^^^
-[rank5]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.90 GiB. GPU 5 has a total capacity of 23.56 GiB of which 760.94 MiB is free. Including non-PyTorch memory, this process has 22.81 GiB memory in use. Of the allocated memory 21.31 GiB is allocated by PyTorch, and 1.09 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[rank5]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 436, in main
+[rank5]:     trainer.train()
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
+[rank5]:     return inner_training_loop(
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1472, in _inner_training_loop
+[rank5]:     model, train_dataloader = self._prepare_for_training(max_steps, train_dataloader, resume_from_checkpoint)
+[rank5]:                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1604, in _prepare_for_training
+[rank5]:     model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
+[rank5]:                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 1549, in prepare
+[rank5]:     result = self._prepare_deepspeed(*args)
+[rank5]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 2439, in _prepare_deepspeed
+[rank5]:     engine, optimizer, _, lr_scheduler = ds_initialize(**kwargs)
+[rank5]:                                          ^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/__init__.py", line 229, in initialize
+[rank5]:     engine = DeepSpeedEngine(args=args,
+[rank5]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 338, in __init__
+[rank5]:     self._configure_distributed_model(model)
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1719, in _configure_distributed_model
+[rank5]:     self.module.to(self.device)
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1384, in to
+[rank5]:     return self._apply(convert)
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank5]:     module._apply(fn)
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank5]:     module._apply(fn)
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank5]:     module._apply(fn)
+[rank5]:   [Previous line repeated 5 more times]
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 965, in _apply
+[rank5]:     param_applied = fn(param)
+[rank5]:                     ^^^^^^^^^
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1370, in convert
+[rank5]:     return t.to(
+[rank5]:            ^^^^^
+[rank5]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 250.00 MiB. GPU 5 has a total capacity of 23.56 GiB of which 224.94 MiB is free. Including non-PyTorch memory, this process has 23.33 GiB memory in use. Of the allocated memory 22.95 GiB is allocated by PyTorch, and 8.40 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 443, in <module>
+[rank2]:     main()
+[rank2]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 436, in main
+[rank2]:     trainer.train()
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
+[rank2]:     return inner_training_loop(
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1472, in _inner_training_loop
+[rank2]:     model, train_dataloader = self._prepare_for_training(max_steps, train_dataloader, resume_from_checkpoint)
+[rank2]:                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1604, in _prepare_for_training
+[rank2]:     model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
+[rank2]:                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 1549, in prepare
+[rank2]:     result = self._prepare_deepspeed(*args)
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 2439, in _prepare_deepspeed
+[rank2]:     engine, optimizer, _, lr_scheduler = ds_initialize(**kwargs)
+[rank2]:                                          ^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/__init__.py", line 229, in initialize
+[rank2]:     engine = DeepSpeedEngine(args=args,
+[rank2]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 338, in __init__
+[rank2]:     self._configure_distributed_model(model)
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1719, in _configure_distributed_model
+[rank2]:     self.module.to(self.device)
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1384, in to
+[rank2]:     return self._apply(convert)
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank2]:     module._apply(fn)
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank2]:     module._apply(fn)
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank2]:     module._apply(fn)
+[rank2]:   [Previous line repeated 5 more times]
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 965, in _apply
+[rank2]:     param_applied = fn(param)
+[rank2]:                     ^^^^^^^^^
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1370, in convert
+[rank2]:     return t.to(
+[rank2]:            ^^^^^
+[rank2]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 250.00 MiB. GPU 2 has a total capacity of 23.56 GiB of which 224.94 MiB is free. Including non-PyTorch memory, this process has 23.33 GiB memory in use. Of the allocated memory 22.95 GiB is allocated by PyTorch, and 8.40 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
 [rank4]: Traceback (most recent call last):
-[rank4]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 490, in <module>
+[rank4]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 443, in <module>
 [rank4]:     main()
-[rank4]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 386, in main
-[rank4]:     model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-[rank4]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 406, in from_pretrained
-[rank4]:     return model_class.from_pretrained(
-[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4283, in from_pretrained
-[rank4]:     model = cls(config, *model_args, **model_kwargs)
-[rank4]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 546, in wrapper
-[rank4]:     f(module, *args, **kwargs)
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 451, in __init__
-[rank4]:     self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
-[rank4]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 546, in wrapper
-[rank4]:     f(module, *args, **kwargs)
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/linear.py", line 109, in __init__
-[rank4]:     torch.empty((out_features, in_features), **factory_kwargs)
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 259, in wrapped_fn
-[rank4]:     tensor.data = tensor.data.to(target_fp_dtype)
-[rank4]:                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/utils/_device.py", line 116, in __torch_function__
-[rank4]:     return func(*args, **kwargs)
-[rank4]:            ^^^^^^^^^^^^^^^^^^^^^
-[rank4]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.90 GiB. GPU 4 has a total capacity of 23.56 GiB of which 760.94 MiB is free. Including non-PyTorch memory, this process has 22.81 GiB memory in use. Of the allocated memory 21.31 GiB is allocated by PyTorch, and 1.09 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
-[2026-08-09 00:45:10,168] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2038653
-[2026-08-09 00:45:10,209] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2038654
-[2026-08-09 00:45:10,239] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2038655
-[2026-08-09 00:45:10,259] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2038656
-[2026-08-09 00:45:10,275] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2038657
-[2026-08-09 00:45:10,275] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2038658
-[2026-08-09 00:45:10,290] [ERROR] [launch.py:341:sigkill_handler] ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = 1
+[rank4]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 436, in main
+[rank4]:     trainer.train()
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
+[rank4]:     return inner_training_loop(
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1472, in _inner_training_loop
+[rank4]:     model, train_dataloader = self._prepare_for_training(max_steps, train_dataloader, resume_from_checkpoint)
+[rank4]:                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1604, in _prepare_for_training
+[rank4]:     model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
+[rank4]:                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 1549, in prepare
+[rank4]:     result = self._prepare_deepspeed(*args)
+[rank4]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 2439, in _prepare_deepspeed
+[rank4]:     engine, optimizer, _, lr_scheduler = ds_initialize(**kwargs)
+[rank4]:                                          ^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/__init__.py", line 229, in initialize
+[rank4]:     engine = DeepSpeedEngine(args=args,
+[rank4]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 338, in __init__
+[rank4]:     self._configure_distributed_model(model)
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1719, in _configure_distributed_model
+[rank4]:     self.module.to(self.device)
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1384, in to
+[rank4]:     return self._apply(convert)
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank4]:     module._apply(fn)
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank4]:     module._apply(fn)
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
+[rank4]:     module._apply(fn)
+[rank4]:   [Previous line repeated 5 more times]
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 965, in _apply
+[rank4]:     param_applied = fn(param)
+[rank4]:                     ^^^^^^^^^
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1370, in convert
+[rank4]:     return t.to(
+[rank4]:            ^^^^^
+[rank4]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 250.00 MiB. GPU 4 has a total capacity of 23.56 GiB of which 224.94 MiB is free. Including non-PyTorch memory, this process has 23.33 GiB memory in use. Of the allocated memory 22.95 GiB is allocated by PyTorch, and 8.40 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[2026-08-09 00:49:55,245] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2040965
+[2026-08-09 00:49:55,580] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2040966
+[2026-08-09 00:49:55,580] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2040967
+[2026-08-09 00:49:55,875] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2040968
+[2026-08-09 00:49:56,212] [ERROR] [launch.py:341:sigkill_handler] ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = 1
