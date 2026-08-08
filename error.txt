@@ -1,4 +1,6 @@
- python -c "import torch, os; os.environ.setdefault('LOCAL_RANK','0'); torch.cuda.set_device(0); import torch.distributed as dist;                              
-  dist.init_process_group(backend='nccl'); import deepspeed.comm as comm; print('ds_world_size:', comm.get_world_size()); print('torch_ws:',                     
-  dist.get_world_size())" 2>&1 | tail -5
-
+(python12) root@poissongpu006:/disk1/duhw/code/prompt_train# python -c "import torch, os; os.environ.setdefault('LOCAL_RANK','0'); torch.cuda.set_device(0); import torch.distributed as dist;dist.init_process_group(backend='nccl'); import deepspeed.comm as comm; print('ds_world_size:', comm.get_world_size()); print('torch_ws:',dist.get_world_size())" 2>&1 | tail -5
+    rank = int(_get_env_or_raise("RANK"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/distributed/rendezvous.py", line 254, in _get_env_or_raise
+    raise _env_error(env_var)
+ValueError: Error initializing torch.distributed using env:// rendezvous: environment variable RANK expected, but not set
