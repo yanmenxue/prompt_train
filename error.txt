@@ -1,13 +1,10 @@
-import urllib.request, json, ssl
-ctx = ssl.create_default_context(); ctx.check_hostname=False; ctx.verify_mode=ssl.CERT_NONE                                                                    
-for t in ['v4.46.0','v4.47.0','v4.48.0','v4.49.0','v4.50.0','v4.51.0','v4.52.0','v4.53.0','v4.54.0']:                                                          
-    url=f'https://api.github.com/repos/huggingface/transformers/contents/src/transformers/models/qwen3?ref={t}'                                                
-    try:                                                                                                                                                       
-        d=json.load(urllib.request.urlopen(url, context=ctx))                                                                                                  
-        names=[f['name'] for f in d]                                                                                                                           
-        has = 'modeling_qwen3.py' in names                                                                                                                     
-        print(f'{t} -> {\"200 HAS modeling\" if has else \"200 NO modeling\"}')                                                                                
-    except urllib.error.HTTPError as e:                                                                                                                        
-        print(f'{t} -> {e.code}')                                                                                                                              
-    except Exception as e:                                                                                                                                     
-        print(f'{t} -> err {type(e).__name__}: {e}')         
+(python12) root@poissongpu006:~/code# python test.py
+v4.46.0 -> 404
+v4.47.0 -> 404
+v4.48.0 -> 404
+v4.49.0 -> 404
+v4.50.0 -> 404
+v4.51.0 -> 200 HAS modeling
+v4.52.0 -> 200 HAS modeling
+v4.53.0 -> 200 HAS modeling
+v4.54.0 -> 200 HAS modeling
