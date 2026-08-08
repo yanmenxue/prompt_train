@@ -1,10 +1,39 @@
-(python12) root@poissongpu006:~/code# python test.py
-v4.46.0 -> 404
-v4.47.0 -> 404
-v4.48.0 -> 404
-v4.49.0 -> 404
-v4.50.0 -> 404
-v4.51.0 -> 200 HAS modeling
-v4.52.0 -> 200 HAS modeling
-v4.53.0 -> 200 HAS modeling
-v4.54.0 -> 200 HAS modeling
+ # ========== 第 1 步：建独立 env（不污染 python12） ==========                                                                              
+  conda create -n ds_train python=3.11 -y
+  conda activate ds_train
+
+  # ========== 第 2 步：装 torch 2.6 + cu124（走 PyTorch 官方源） ==========                                                                                     
+  pip install torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu124
+
+  # ========== 第 3 步：装 CUDA toolkit 12.4（DS/bnb 编译需要 nvcc） ==========                                                                                  
+  conda install -c nvidia/label/cuda-12.4.0 cuda-toolkit=12.4 -y
+
+  # 让当前 shell 的 nvcc 立即可用                                                                                                                                
+  export CUDA_HOME=$CONDA_PREFIX
+  export PATH=$CONDA_PREFIX/bin:$PATH
+  nvcc --version   # 应显示 12.4                                                                                                                                 
+
+  # ========== 第 4 步：装其余套件 ==========                                                                                                                    
+  pip install \
+    transformers==4.51.0 \
+    accelerate==0.34.2 \
+    peft==0.14.0 \
+    datasets \
+    sentencepiece \
+    tensorboard \
+    pyarrow \
+    pandas
+
+  # DS 0.16.1 单独装（带编译，加 --no-build-isolation 让它用本 env 的 torch/nvcc）                                                                               
+  pip install deepspeed==0.16.1 --no-build-isolation
+
+  # bnb 0.44.1（有 cu124 预编译 wheel，直接装）                                                                                                                  
+  pip install bitsandbytes==0.44.1
+
+  # ========== 第 5 步：验证 ==========                                                                                                                          
+  python -c "import torch,transformers,deepspeed,peft,accelerate,bitsandbytes as bnb; print('torch',torch.__version__,'cuda',torch.version.cuda);                
+  print('transformers',transformers.__version__); print('deepspeed',deepspeed.__version__); print('peft',peft.__version__);                                      
+  print('accelerate',accelerate.__version__); print('bnb',bnb.__version__)"                                                                                      
+
+  # 验证 nvcc 和 torch CUDA 版本一致（都该是 12.4）                                                                                                              
+  python -c "import torch; print('torch CUDA:', torch.version.cuda); print('nvcc:'); import subprocess; subprocess.run(['nvcc','--version'])" 
