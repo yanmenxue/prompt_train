@@ -1,6 +1,85 @@
-(python12) root@poissongpu006:/disk1/duhw/code/prompt_train# python -c "import torch, os; os.environ.setdefault('LOCAL_RANK','0'); torch.cuda.set_device(0); import torch.distributed as dist;dist.init_process_group(backend='nccl'); import deepspeed.comm as comm; print('ds_world_size:', comm.get_world_size()); print('torch_ws:',dist.get_world_size())" 2>&1 | tail -5
-    rank = int(_get_env_or_raise("RANK"))
-               ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/distributed/rendezvous.py", line 254, in _get_env_or_raise
-    raise _env_error(env_var)
-ValueError: Error initializing torch.distributed using env:// rendezvous: environment variable RANK expected, but not set
+python12) root@poissongpu006:/disk1/duhw/code/prompt_train# ^C
+(python12) root@poissongpu006:/disk1/duhw/code/prompt_train# NCCL_IB_DISABLE=1   CUDA_VISIBLE_DEVICES=2,3,4,5,6,7   deepspeed lora_train/src/train_qlora.py       --max_steps 20 --max_samples 16       --per_device_batch 1 --grad_accum 1       --model_name ../../models/Qwen3_32B/
+     --attn_impl sdpa       --deepspeed lora_train/configs/ds_zero3_offload.json
+[2026-08-09 00:41:59,124] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+Detected VISIBLE_DEVICES=2,3,4,5,6,7: setting --include=localhost:2,3,4,5,6,7
+[2026-08-09 00:41:59,124] [INFO] [runner.py:630:main] cmd = /root/anaconda3/envs/python12/bin/python3.12 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMiwgMywgNCwgNSwgNiwgN119 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info lora_train/src/train_qlora.py --max_steps 20 --max_samples 16 --per_device_batch 1 --grad_accum 1 --model_name ../../models/Qwen3_32B/ --attn_impl sdpa --deepspeed lora_train/configs/ds_zero3_offload.json
+[2026-08-09 00:42:05,519] [INFO] [launch.py:155:main] 0 NCCL_IB_DISABLE=1
+[2026-08-09 00:42:05,519] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [2, 3, 4, 5, 6, 7]}
+[2026-08-09 00:42:05,519] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=6, node_rank=0
+[2026-08-09 00:42:05,519] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5]})
+[2026-08-09 00:42:05,519] [INFO] [launch.py:180:main] dist_world_size=6
+[2026-08-09 00:42:05,519] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=2,3,4,5,6,7
+[2026-08-09 00:42:05,520] [INFO] [launch.py:272:main] process 2037156 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=0', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:42:05,521] [INFO] [launch.py:272:main] process 2037157 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=1', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:42:05,521] [INFO] [launch.py:272:main] process 2037158 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=2', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:42:05,522] [INFO] [launch.py:272:main] process 2037159 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=3', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:42:05,523] [INFO] [launch.py:272:main] process 2037160 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=4', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:42:05,523] [INFO] [launch.py:272:main] process 2037161 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 482, in <module>
+[rank1]:     main()
+[rank1]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 302, in main
+[rank1]:     ds_ws = ds_comm.get_world_size()
+[rank1]:             ^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/comm/comm.py", line 704, in get_world_size
+[rank1]:     assert cdb is not None and cdb.is_initialized(
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]: AssertionError: DeepSpeed backend not set, please initialize it using init_process_group()
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 482, in <module>
+[rank2]:     main()
+[rank2]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 302, in main
+[rank2]:     ds_ws = ds_comm.get_world_size()
+[rank2]:             ^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/comm/comm.py", line 704, in get_world_size
+[rank2]:     assert cdb is not None and cdb.is_initialized(
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]: AssertionError: DeepSpeed backend not set, please initialize it using init_process_group()
+[rank4]: Traceback (most recent call last):
+[rank4]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 482, in <module>
+[rank4]:     main()
+[rank4]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 302, in main
+[rank4]:     ds_ws = ds_comm.get_world_size()
+[rank4]:             ^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/comm/comm.py", line 704, in get_world_size
+[rank4]:     assert cdb is not None and cdb.is_initialized(
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]: AssertionError: DeepSpeed backend not set, please initialize it using init_process_group()
+[rank5]: Traceback (most recent call last):
+[rank5]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 482, in <module>
+[rank5]:     main()
+[rank5]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 302, in main
+[rank5]:     ds_ws = ds_comm.get_world_size()
+[rank5]:             ^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/comm/comm.py", line 704, in get_world_size
+[rank5]:     assert cdb is not None and cdb.is_initialized(
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]: AssertionError: DeepSpeed backend not set, please initialize it using init_process_group()
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 482, in <module>
+[rank0]:     main()
+[rank0]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 302, in main
+[rank0]:     ds_ws = ds_comm.get_world_size()
+[rank0]:             ^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/comm/comm.py", line 704, in get_world_size
+[rank0]:     assert cdb is not None and cdb.is_initialized(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]: AssertionError: DeepSpeed backend not set, please initialize it using init_process_group()
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 482, in <module>
+[rank3]:     main()
+[rank3]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 302, in main
+[rank3]:     ds_ws = ds_comm.get_world_size()
+[rank3]:             ^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/comm/comm.py", line 704, in get_world_size
+[rank3]:     assert cdb is not None and cdb.is_initialized(
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]: AssertionError: DeepSpeed backend not set, please initialize it using init_process_group()
+[2026-08-09 00:42:17,526] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2037156
+[2026-08-09 00:42:17,567] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2037157
+[2026-08-09 00:42:17,598] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2037158
+[2026-08-09 00:42:17,617] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2037159
+[2026-08-09 00:42:17,633] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2037160
+[2026-08-09 00:42:17,647] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2037161
+[2026-08-09 00:42:17,647] [ERROR] [launch.py:341:sigkill_handler] ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = 1
