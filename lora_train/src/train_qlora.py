@@ -48,13 +48,18 @@ from torch.nn import CrossEntropyLoss
 
 
 class BoundaryTrainer(Trainer):
-    """Trainer that computes loss ONLY on the assistant label positions.
+    """Trainer that computes loss ONLY on the assistant label positions, and
+    bypasses accelerate's @convert_to_fp32 wrapper that OOMs on big-vocab
+    models.
 
-    32B Qwen3 has vocab=151552. The default loss computes logits over the
-    FULL seq_len (e.g. [batch, 512, 151552]) then casts to fp32 -> OOMs on
-    24GB cards. Since our completion-only labels mask everything except 1-2
-    assistant tokens, we slice logits to only those positions before the
-    fp32 cast, cutting the logits tensor (and its fp32 copy) by ~99%.
+    Problem: accelerate wraps PeftModel.forward with convert_to_fp32, which
+    casts the FULL logits tensor [B, T, V=151552] to fp32 the instant
+    forward returns — BEFORE our slicing can cut it down. On a 24GB card with
+    a 32B 4bit base already ~20GB, that ~300MB fp32 cast peaks over the top.
+
+    Fix: call the underlying model forward directly (skipping the accelerate
+    wrapper), keep logits in bf16, slice to the 1-2 assistant positions, then
+    cast only that tiny slice to fp32 for the cross-entropy.
     """
 
     def __init__(self, *args, **kwargs):
@@ -63,8 +68,12 @@ class BoundaryTrainer(Trainer):
 
     def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
         labels = inputs.pop("labels")
-        outputs = model(**inputs)
-        logits = outputs.logits  # [B, T, V]
+        # Call the base model forward directly, bypassing accelerate's
+        # convert_to_fp32 wrapper that casts the full logits to fp32.
+        # model is a PeftModel; model.base_model.model is the underlying Qwen3.
+        base = model.base_model.model if hasattr(model, "base_model") else model
+        outputs = base(**inputs)
+        logits = outputs.logits  # [B, T, V], bf16, NOT auto-cast to fp32
 
         # Shift for causal LM: predict token t from position t-1.
         shift_logits = logits[..., :-1, :].contiguous()
@@ -72,19 +81,17 @@ class BoundaryTrainer(Trainer):
 
         # Find positions that actually carry loss (label != -100).
         # For our task this is typically 1-2 tokens per sample.
-        valid = (shift_labels != -100).any(dim=0)  # [T] but we keep batch dim below
-        # Gather only the timesteps with at least one valid label across the batch.
+        valid = (shift_labels != -100).any(dim=0)  # [T]
         keep = valid.nonzero(as_tuple=False).squeeze(-1)  # [K], K = 1..3
         if keep.numel() == 0:
-            # all masked (shouldn't happen); return zero loss
             loss = shift_logits.sum() * 0.0
         else:
             shift_logits = shift_logits[:, keep, :].contiguous()  # [B, K, V]
             shift_labels = shift_labels[:, keep].contiguous()      # [B, K]
-            # Now the fp32 cast is on [B, K, V] with K~1-2 -> ~1MB, not ~300MB.
+            # fp32 cast only on [B, K, V] with K~1-2 -> ~1MB, not ~300MB.
             loss = self.loss_fn(
                 shift_logits.view(-1, shift_logits.size(-1)).to(torch.float32),
-                shift_labels.view(-1),
+                shift_labels.view(-1).to(torch.long),
             )
         return (loss, outputs) if return_outputs else loss
 
