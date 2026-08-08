@@ -44,6 +44,49 @@ from transformers import (
     TrainingArguments,
     set_seed,
 )
+from torch.nn import CrossEntropyLoss
+
+
+class BoundaryTrainer(Trainer):
+    """Trainer that computes loss ONLY on the assistant label positions.
+
+    32B Qwen3 has vocab=151552. The default loss computes logits over the
+    FULL seq_len (e.g. [batch, 512, 151552]) then casts to fp32 -> OOMs on
+    24GB cards. Since our completion-only labels mask everything except 1-2
+    assistant tokens, we slice logits to only those positions before the
+    fp32 cast, cutting the logits tensor (and its fp32 copy) by ~99%.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.loss_fn = CrossEntropyLoss(ignore_index=-100)
+
+    def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
+        labels = inputs.pop("labels")
+        outputs = model(**inputs)
+        logits = outputs.logits  # [B, T, V]
+
+        # Shift for causal LM: predict token t from position t-1.
+        shift_logits = logits[..., :-1, :].contiguous()
+        shift_labels = labels[..., 1:].contiguous()
+
+        # Find positions that actually carry loss (label != -100).
+        # For our task this is typically 1-2 tokens per sample.
+        valid = (shift_labels != -100).any(dim=0)  # [T] but we keep batch dim below
+        # Gather only the timesteps with at least one valid label across the batch.
+        keep = valid.nonzero(as_tuple=False).squeeze(-1)  # [K], K = 1..3
+        if keep.numel() == 0:
+            # all masked (shouldn't happen); return zero loss
+            loss = shift_logits.sum() * 0.0
+        else:
+            shift_logits = shift_logits[:, keep, :].contiguous()  # [B, K, V]
+            shift_labels = shift_labels[:, keep].contiguous()      # [B, K]
+            # Now the fp32 cast is on [B, K, V] with K~1-2 -> ~1MB, not ~300MB.
+            loss = self.loss_fn(
+                shift_logits.view(-1, shift_logits.size(-1)).to(torch.float32),
+                shift_labels.view(-1),
+            )
+        return (loss, outputs) if return_outputs else loss
 
 # System prompts must match intent_router/router.py byte-for-byte.
 ROOT = Path(__file__).resolve().parents[2]
@@ -67,7 +110,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--val_file", default="lora_train/dataset/val.jsonl")
     p.add_argument("--output_dir", default="lora_train/runs/qwen3_32b_boundary_qlora")
     p.add_argument("--deepspeed", default=None, help="path to ds config; set None to disable")
-    p.add_argument("--max_length", type=int, default=512, help="seq len cap; Qwen3 boundary samples are short (~300-500 tokens), 512 suffices and cuts the fp32-logits OOM risk")
+    p.add_argument("--max_length", type=int, default=384, help="seq len cap; boundary samples are ~250-350 tokens, 384 suffices")
     p.add_argument("--max_samples", type=int, default=None, help="cap dataset size for smoke tests")
     p.add_argument("--per_device_batch", type=int, default=1)
     p.add_argument("--grad_accum", type=int, default=4)
@@ -322,7 +365,7 @@ def main() -> None:
         deepspeed=args.deepspeed,
     )
 
-    trainer = Trainer(
+    trainer = BoundaryTrainer(
         model=model,
         args=targs,
         train_dataset=train_ds,
