@@ -1,12 +1,3 @@
-  python -c "                                                                                                                                                    
-  from transformers import TrainingArguments                                                                                                                     
-  import inspect                                                                                                                                                 
-  # 确认 fsdp 参数还在                                                                                                                                           
-  sig = inspect.signature(TrainingArguments.__init__)                                                                                                            
-  fsdp_params = [p for p in sig.parameters if 'fsdp' in p.lower()]                                                                                               
-  print('fsdp params:', fsdp_params)                                                                                                                             
-  # 确认 Qwen3 的 decoder layer 类名                                                                                                                             
-  from transformers.models.qwen3 import modeling_qwen3                                                                                                           
-  layers = [n for n in dir(modeling_qwen3) if 'DecoderLayer' in n or 'Block' in n]                                                                               
-  print('Qwen3 layer classes:', layers)                                                                                                                          
-  "                  
+   curl -s --max-time 15 "https://api.github.com/repos/huggingface/transformers/commits?path=src/transformers/models/qwen3/modeling_qwen3.py&per_page=3" | python 
+  -c "import sys,json; d=json.load(sys.stdin); [print(c['sha'][:8], c['commit']['author']['date'], c['commit']['message'].split(chr(10))[0]) for c in d]" 2>&1 | 
+  head -10
