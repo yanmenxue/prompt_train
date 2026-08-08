@@ -1,312 +1,125 @@
 (python12) root@poissongpu006:/disk1/duhw/code/prompt_train# NCCL_IB_DISABLE=1   CUDA_VISIBLE_DEVICES=2,3,4,5,6,7   deepspeed lora_train/src/train_qlora.py       --max_steps 20 --max_samples 16       --per_device_batch 1 --grad_accum 1       --model_name ../../models/Qwen3_32B/       --attn_impl sdpa       --deepspeed lora_train/configs/ds_zero3_offload.json
-[2026-08-08 23:47:43,324] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+[2026-08-09 00:13:25,886] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
 Detected VISIBLE_DEVICES=2,3,4,5,6,7: setting --include=localhost:2,3,4,5,6,7
-[2026-08-08 23:47:43,324] [INFO] [runner.py:630:main] cmd = /root/anaconda3/envs/python12/bin/python3.12 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMiwgMywgNCwgNSwgNiwgN119 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info lora_train/src/train_qlora.py --max_steps 20 --max_samples 16 --per_device_batch 1 --grad_accum 1 --model_name ../../models/Qwen3_32B/ --attn_impl sdpa --deepspeed lora_train/configs/ds_zero3_offload.json
-[2026-08-08 23:47:49,984] [INFO] [launch.py:155:main] 0 NCCL_IB_DISABLE=1
-[2026-08-08 23:47:49,984] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [2, 3, 4, 5, 6, 7]}
-[2026-08-08 23:47:49,984] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=6, node_rank=0
-[2026-08-08 23:47:49,984] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5]})
-[2026-08-08 23:47:49,984] [INFO] [launch.py:180:main] dist_world_size=6
-[2026-08-08 23:47:49,984] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=2,3,4,5,6,7
-[2026-08-08 23:47:49,985] [INFO] [launch.py:272:main] process 2022945 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=0', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-08 23:47:49,986] [INFO] [launch.py:272:main] process 2022946 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=1', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-08 23:47:49,986] [INFO] [launch.py:272:main] process 2022947 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=2', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-08 23:47:49,987] [INFO] [launch.py:272:main] process 2022948 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=3', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-08 23:47:49,987] [INFO] [launch.py:272:main] process 2022949 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=4', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-08 23:47:49,988] [INFO] [launch.py:272:main] process 2022950 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 4737.87it/s]
-Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 6329.44it/s]
-Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 5818.92it/s]
-Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 6488.95it/s]
-Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 7224.65it/s]
-Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:00<00:00, 6712.85it/s]
-trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 166.93 examples/s]
-trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 177.78 examples/s]
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 319.79 examples/s]
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 347.25 examples/s]
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 333.72 examples/s]
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 333.20 examples/s]
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 352.78 examples/s]
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 192.01 examples/s]
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 193.14 examples/s]
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 174.44 examples/s]
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 202.56 examples/s]
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
-Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 197.32 examples/s]
-[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+[2026-08-09 00:13:25,887] [INFO] [runner.py:630:main] cmd = /root/anaconda3/envs/python12/bin/python3.12 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMiwgMywgNCwgNSwgNiwgN119 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info lora_train/src/train_qlora.py --max_steps 20 --max_samples 16 --per_device_batch 1 --grad_accum 1 --model_name ../../models/Qwen3_32B/ --attn_impl sdpa --deepspeed lora_train/configs/ds_zero3_offload.json
+[2026-08-09 00:13:32,453] [INFO] [launch.py:155:main] 0 NCCL_IB_DISABLE=1
+[2026-08-09 00:13:32,453] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [2, 3, 4, 5, 6, 7]}
+[2026-08-09 00:13:32,453] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=6, node_rank=0
+[2026-08-09 00:13:32,453] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5]})
+[2026-08-09 00:13:32,453] [INFO] [launch.py:180:main] dist_world_size=6
+[2026-08-09 00:13:32,453] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=2,3,4,5,6,7
+[2026-08-09 00:13:32,454] [INFO] [launch.py:272:main] process 2027670 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=0', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:13:32,455] [INFO] [launch.py:272:main] process 2027671 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=1', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:13:32,455] [INFO] [launch.py:272:main] process 2027672 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=2', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:13:32,456] [INFO] [launch.py:272:main] process 2027673 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=3', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:13:32,457] [INFO] [launch.py:272:main] process 2027674 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=4', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:13:32,457] [INFO] [launch.py:272:main] process 2027675 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
 [rank2]: Traceback (most recent call last):
-[rank2]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 431, in <module>
+[rank2]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 455, in <module>
 [rank2]:     main()
-[rank2]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 424, in main
-[rank2]:     trainer.train()
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
-[rank2]:     return inner_training_loop(
-[rank2]:            ^^^^^^^^^^^^^^^^^^^^
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1472, in _inner_training_loop
-[rank2]:     model, train_dataloader = self._prepare_for_training(max_steps, train_dataloader, resume_from_checkpoint)
-[rank2]:                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1604, in _prepare_for_training
-[rank2]:     model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
-[rank2]:                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 1549, in prepare
-[rank2]:     result = self._prepare_deepspeed(*args)
-[rank2]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 2439, in _prepare_deepspeed
-[rank2]:     engine, optimizer, _, lr_scheduler = ds_initialize(**kwargs)
-[rank2]:                                          ^^^^^^^^^^^^^^^^^^^^^^^
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/__init__.py", line 229, in initialize
-[rank2]:     engine = DeepSpeedEngine(args=args,
-[rank2]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 338, in __init__
-[rank2]:     self._configure_distributed_model(model)
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1719, in _configure_distributed_model
-[rank2]:     self.module.to(self.device)
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1384, in to
-[rank2]:     return self._apply(convert)
-[rank2]:            ^^^^^^^^^^^^^^^^^^^^
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank2]:     module._apply(fn)
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank2]:     module._apply(fn)
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank2]:     module._apply(fn)
-[rank2]:   [Previous line repeated 1 more time]
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 965, in _apply
-[rank2]:     param_applied = fn(param)
-[rank2]:                     ^^^^^^^^^
-[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1377, in convert
-[rank2]:     raise NotImplementedError(
-[rank2]: NotImplementedError: Cannot copy out of meta tensor; no data! Please use torch.nn.Module.to_empty() instead of torch.nn.Module.to() when moving module from meta to a different device.
+[rank2]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 350, in main
+[rank2]:     with zero.Init(config_dict_or_path=args.deepspeed):
+[rank2]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 1049, in __init__
+[rank2]:     _ds_config = deepspeed.runtime.config.DeepSpeedConfig(config_dict_or_path,
+[rank2]:                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 781, in __init__
+[rank2]:     self._configure_train_batch_size()
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 978, in _configure_train_batch_size
+[rank2]:     self._batch_assertion()
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 918, in _batch_assertion
+[rank2]:     assert (train_batch > 0), f"Train batch size: {train_batch} has to be greater than 0"
+[rank2]:             ^^^^^^^^^^^^^^^
+[rank2]: TypeError: '>' not supported between instances of 'str' and 'int'
 [rank4]: Traceback (most recent call last):
-[rank4]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 431, in <module>
+[rank4]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 455, in <module>
 [rank4]:     main()
-[rank4]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 424, in main
-[rank4]:     trainer.train()
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
-[rank4]:     return inner_training_loop(
-[rank4]:            ^^^^^^^^^^^^^^^^^^^^
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1472, in _inner_training_loop
-[rank4]:     model, train_dataloader = self._prepare_for_training(max_steps, train_dataloader, resume_from_checkpoint)
-[rank4]:                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1604, in _prepare_for_training
-[rank4]:     model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
-[rank4]:                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 1549, in prepare
-[rank4]:     result = self._prepare_deepspeed(*args)
-[rank4]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 2439, in _prepare_deepspeed
-[rank4]:     engine, optimizer, _, lr_scheduler = ds_initialize(**kwargs)
-[rank4]:                                          ^^^^^^^^^^^^^^^^^^^^^^^
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/__init__.py", line 229, in initialize
-[rank4]:     engine = DeepSpeedEngine(args=args,
-[rank4]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 338, in __init__
-[rank4]:     self._configure_distributed_model(model)
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1719, in _configure_distributed_model
-[rank4]:     self.module.to(self.device)
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1384, in to
-[rank4]:     return self._apply(convert)
-[rank4]:            ^^^^^^^^^^^^^^^^^^^^
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank4]:     module._apply(fn)
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank4]:     module._apply(fn)
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank4]:     module._apply(fn)
-[rank4]:   [Previous line repeated 1 more time]
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 965, in _apply
-[rank4]:     param_applied = fn(param)
-[rank4]:                     ^^^^^^^^^
-[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1377, in convert
-[rank4]:     raise NotImplementedError(
-[rank4]: NotImplementedError: Cannot copy out of meta tensor; no data! Please use torch.nn.Module.to_empty() instead of torch.nn.Module.to() when moving module from meta to a different device.
+[rank4]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 350, in main
+[rank4]:     with zero.Init(config_dict_or_path=args.deepspeed):
+[rank4]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 1049, in __init__
+[rank4]:     _ds_config = deepspeed.runtime.config.DeepSpeedConfig(config_dict_or_path,
+[rank4]:                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 781, in __init__
+[rank4]:     self._configure_train_batch_size()
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 978, in _configure_train_batch_size
+[rank4]:     self._batch_assertion()
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 918, in _batch_assertion
+[rank4]:     assert (train_batch > 0), f"Train batch size: {train_batch} has to be greater than 0"
+[rank4]:             ^^^^^^^^^^^^^^^
+[rank4]: TypeError: '>' not supported between instances of 'str' and 'int'
 [rank1]: Traceback (most recent call last):
-[rank1]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 431, in <module>
+[rank1]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 455, in <module>
 [rank1]:     main()
-[rank1]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 424, in main
-[rank1]:     trainer.train()
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
-[rank1]:     return inner_training_loop(
-[rank1]:            ^^^^^^^^^^^^^^^^^^^^
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1472, in _inner_training_loop
-[rank1]:     model, train_dataloader = self._prepare_for_training(max_steps, train_dataloader, resume_from_checkpoint)
-[rank1]:                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1604, in _prepare_for_training
-[rank1]:     model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
-[rank1]:                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 1549, in prepare
-[rank1]:     result = self._prepare_deepspeed(*args)
-[rank1]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 2439, in _prepare_deepspeed
-[rank1]:     engine, optimizer, _, lr_scheduler = ds_initialize(**kwargs)
-[rank1]:                                          ^^^^^^^^^^^^^^^^^^^^^^^
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/__init__.py", line 229, in initialize
-[rank1]:     engine = DeepSpeedEngine(args=args,
-[rank1]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 338, in __init__
-[rank1]:     self._configure_distributed_model(model)
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1719, in _configure_distributed_model
-[rank1]:     self.module.to(self.device)
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1384, in to
-[rank1]:     return self._apply(convert)
-[rank1]:            ^^^^^^^^^^^^^^^^^^^^
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank1]:     module._apply(fn)
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank1]:     module._apply(fn)
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank1]:     module._apply(fn)
-[rank1]:   [Previous line repeated 1 more time]
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 965, in _apply
-[rank1]:     param_applied = fn(param)
-[rank1]:                     ^^^^^^^^^
-[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1377, in convert
-[rank1]:     raise NotImplementedError(
-[rank1]: NotImplementedError: Cannot copy out of meta tensor; no data! Please use torch.nn.Module.to_empty() instead of torch.nn.Module.to() when moving module from meta to a different device.
-[rank0]: Traceback (most recent call last):
-[rank0]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 431, in <module>
-[rank0]:     main()
-[rank0]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 424, in main
-[rank0]:     trainer.train()
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
-[rank0]:     return inner_training_loop(
-[rank0]:            ^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1472, in _inner_training_loop
-[rank0]:     model, train_dataloader = self._prepare_for_training(max_steps, train_dataloader, resume_from_checkpoint)
-[rank0]:                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1604, in _prepare_for_training
-[rank0]:     model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
-[rank0]:                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 1549, in prepare
-[rank0]:     result = self._prepare_deepspeed(*args)
-[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 2439, in _prepare_deepspeed
-[rank0]:     engine, optimizer, _, lr_scheduler = ds_initialize(**kwargs)
-[rank0]:                                          ^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/__init__.py", line 229, in initialize
-[rank0]:     engine = DeepSpeedEngine(args=args,
-[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 338, in __init__
-[rank0]:     self._configure_distributed_model(model)
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1719, in _configure_distributed_model
-[rank0]:     self.module.to(self.device)
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1384, in to
-[rank0]:     return self._apply(convert)
-[rank0]:            ^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank0]:     module._apply(fn)
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank0]:     module._apply(fn)
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank0]:     module._apply(fn)
-[rank0]:   [Previous line repeated 1 more time]
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 965, in _apply
-[rank0]:     param_applied = fn(param)
-[rank0]:                     ^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1377, in convert
-[rank0]:     raise NotImplementedError(
-[rank0]: NotImplementedError: Cannot copy out of meta tensor; no data! Please use torch.nn.Module.to_empty() instead of torch.nn.Module.to() when moving module from meta to a different device.
-[rank3]: Traceback (most recent call last):
-[rank3]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 431, in <module>
-[rank3]:     main()
-[rank3]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 424, in main
-[rank3]:     trainer.train()
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
-[rank3]:     return inner_training_loop(
-[rank3]:            ^^^^^^^^^^^^^^^^^^^^
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1472, in _inner_training_loop
-[rank3]:     model, train_dataloader = self._prepare_for_training(max_steps, train_dataloader, resume_from_checkpoint)
-[rank3]:                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1604, in _prepare_for_training
-[rank3]:     model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
-[rank3]:                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 1549, in prepare
-[rank3]:     result = self._prepare_deepspeed(*args)
-[rank3]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 2439, in _prepare_deepspeed
-[rank3]:     engine, optimizer, _, lr_scheduler = ds_initialize(**kwargs)
-[rank3]:                                          ^^^^^^^^^^^^^^^^^^^^^^^
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/__init__.py", line 229, in initialize
-[rank3]:     engine = DeepSpeedEngine(args=args,
-[rank3]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 338, in __init__
-[rank3]:     self._configure_distributed_model(model)
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1719, in _configure_distributed_model
-[rank3]:     self.module.to(self.device)
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1384, in to
-[rank3]:     return self._apply(convert)
-[rank3]:            ^^^^^^^^^^^^^^^^^^^^
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank3]:     module._apply(fn)
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank3]:     module._apply(fn)
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank3]:     module._apply(fn)
-[rank3]:   [Previous line repeated 1 more time]
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 965, in _apply
-[rank3]:     param_applied = fn(param)
-[rank3]:                     ^^^^^^^^^
-[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1377, in convert
-[rank3]:     raise NotImplementedError(
-[rank3]: NotImplementedError: Cannot copy out of meta tensor; no data! Please use torch.nn.Module.to_empty() instead of torch.nn.Module.to() when moving module from meta to a different device.
+[rank1]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 350, in main
+[rank1]:     with zero.Init(config_dict_or_path=args.deepspeed):
+[rank1]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 1049, in __init__
+[rank1]:     _ds_config = deepspeed.runtime.config.DeepSpeedConfig(config_dict_or_path,
+[rank1]:                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 781, in __init__
+[rank1]:     self._configure_train_batch_size()
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 978, in _configure_train_batch_size
+[rank1]:     self._batch_assertion()
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 918, in _batch_assertion
+[rank1]:     assert (train_batch > 0), f"Train batch size: {train_batch} has to be greater than 0"
+[rank1]:             ^^^^^^^^^^^^^^^
+[rank1]: TypeError: '>' not supported between instances of 'str' and 'int'
 [rank5]: Traceback (most recent call last):
-[rank5]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 431, in <module>
+[rank5]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 455, in <module>
 [rank5]:     main()
-[rank5]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 424, in main
-[rank5]:     trainer.train()
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
-[rank5]:     return inner_training_loop(
-[rank5]:            ^^^^^^^^^^^^^^^^^^^^
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1472, in _inner_training_loop
-[rank5]:     model, train_dataloader = self._prepare_for_training(max_steps, train_dataloader, resume_from_checkpoint)
-[rank5]:                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1604, in _prepare_for_training
-[rank5]:     model, self.optimizer, self.lr_scheduler = self.accelerator.prepare(
-[rank5]:                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 1549, in prepare
-[rank5]:     result = self._prepare_deepspeed(*args)
-[rank5]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/accelerator.py", line 2439, in _prepare_deepspeed
-[rank5]:     engine, optimizer, _, lr_scheduler = ds_initialize(**kwargs)
-[rank5]:                                          ^^^^^^^^^^^^^^^^^^^^^^^
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/__init__.py", line 229, in initialize
-[rank5]:     engine = DeepSpeedEngine(args=args,
-[rank5]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 338, in __init__
-[rank5]:     self._configure_distributed_model(model)
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/engine.py", line 1719, in _configure_distributed_model
-[rank5]:     self.module.to(self.device)
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1384, in to
-[rank5]:     return self._apply(convert)
-[rank5]:            ^^^^^^^^^^^^^^^^^^^^
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank5]:     module._apply(fn)
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank5]:     module._apply(fn)
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 934, in _apply
-[rank5]:     module._apply(fn)
-[rank5]:   [Previous line repeated 1 more time]
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 965, in _apply
-[rank5]:     param_applied = fn(param)
-[rank5]:                     ^^^^^^^^^
-[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1377, in convert
-[rank5]:     raise NotImplementedError(
-[rank5]: NotImplementedError: Cannot copy out of meta tensor; no data! Please use torch.nn.Module.to_empty() instead of torch.nn.Module.to() when moving module from meta to a different device.
-[rank0]:[W808 23:48:12.823621226 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
-[2026-08-08 23:48:13,992] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2022945
-[2026-08-08 23:48:14,208] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2022946
-[2026-08-08 23:48:14,208] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2022947
-[2026-08-08 23:48:14,248] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2022948
-[2026-08-08 23:48:14,491] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2022949
-[2026-08-08 23:48:14,529] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2022950
-[2026-08-08 23:48:14,560] [ERROR] [launch.py:341:sigkill_handler] ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = 1
+[rank5]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 350, in main
+[rank5]:     with zero.Init(config_dict_or_path=args.deepspeed):
+[rank5]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 1049, in __init__
+[rank5]:     _ds_config = deepspeed.runtime.config.DeepSpeedConfig(config_dict_or_path,
+[rank5]:                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 781, in __init__
+[rank5]:     self._configure_train_batch_size()
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 978, in _configure_train_batch_size
+[rank5]:     self._batch_assertion()
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 918, in _batch_assertion
+[rank5]:     assert (train_batch > 0), f"Train batch size: {train_batch} has to be greater than 0"
+[rank5]:             ^^^^^^^^^^^^^^^
+[rank5]: TypeError: '>' not supported between instances of 'str' and 'int'
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 455, in <module>
+[rank3]:     main()
+[rank3]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 350, in main
+[rank3]:     with zero.Init(config_dict_or_path=args.deepspeed):
+[rank3]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 1049, in __init__
+[rank3]:     _ds_config = deepspeed.runtime.config.DeepSpeedConfig(config_dict_or_path,
+[rank3]:                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 781, in __init__
+[rank3]:     self._configure_train_batch_size()
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 978, in _configure_train_batch_size
+[rank3]:     self._batch_assertion()
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 918, in _batch_assertion
+[rank3]:     assert (train_batch > 0), f"Train batch size: {train_batch} has to be greater than 0"
+[rank3]:             ^^^^^^^^^^^^^^^
+[rank3]: TypeError: '>' not supported between instances of 'str' and 'int'
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 455, in <module>
+[rank0]:     main()
+[rank0]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 350, in main
+[rank0]:     with zero.Init(config_dict_or_path=args.deepspeed):
+[rank0]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 1049, in __init__
+[rank0]:     _ds_config = deepspeed.runtime.config.DeepSpeedConfig(config_dict_or_path,
+[rank0]:                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 781, in __init__
+[rank0]:     self._configure_train_batch_size()
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 978, in _configure_train_batch_size
+[rank0]:     self._batch_assertion()
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 918, in _batch_assertion
+[rank0]:     assert (train_batch > 0), f"Train batch size: {train_batch} has to be greater than 0"
+[rank0]:             ^^^^^^^^^^^^^^^
+[rank0]: TypeError: '>' not supported between instances of 'str' and 'int'
+[2026-08-09 00:13:45,460] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2027670
+[2026-08-09 00:13:45,530] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2027671
+[2026-08-09 00:13:45,543] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2027672
+[2026-08-09 00:13:45,544] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2027673
+[2026-08-09 00:13:45,556] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2027674
+[2026-08-09 00:13:45,568] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2027675
+[2026-08-09 00:13:45,580] [ERROR] [launch.py:341:sigkill_handler] ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = 1
