@@ -29,7 +29,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -283,34 +282,18 @@ def main() -> None:
     args = parse_args()
     set_seed(args.seed)
 
-    # DeepSpeed ZeRO-3: initialize the process group BEFORE loading the model,
-    # so from_pretrained can run inside deepspeed.zero.Init() (see the model
-    # block below) and partition each parameter across ranks at creation time.
-    # NCCL requires torch.cuda.set_device first; the deepspeed launcher sets
-    # LOCAL_RANK in the environment.
-    if args.deepspeed:
-        import torch.distributed as dist
-
-        local_rank = int(os.environ.get("LOCAL_RANK", args.local_rank))
-        torch.cuda.set_device(local_rank)
-        if not dist.is_initialized():
-            dist.init_process_group(backend="nccl")
-        # DeepSpeed has its OWN comm layer, separate from torch.distributed.
-        # If we don't init it, DSConfig.world_size falls back to 1 and
-        # zero.Init partitions as if world_size==1 -> no sharding -> OOM.
-        # init_distributed() hooks DS's comm onto the torch PG we just made.
-        import deepspeed.comm as ds_comm
-
-        ds_comm.init_distributed()
-
-        # TEMP DEBUG: confirm DS comm layer now sees world_size=6.
-        ds_ws = ds_comm.get_world_size()
-        torch_ws = dist.get_world_size()
-        print(
-            f"[debug rank{local_rank}] torch_world_size={torch_ws} "
-            f"ds_comm_world_size={ds_ws}",
-            flush=True,
-        )
+    # NOTE: we do NOT manually init the process group or call deepspeed.
+    # zero.Init here. Earlier attempts did, and hit two walls:
+    #   1) DSConfig.world_size stays 1 unless deepspeed.comm is separately
+    #      init'd, so zero.Init doesn't shard -> full 64GB per GPU -> OOM.
+    #   2) Even with world_size=6, zero.Init's partition runs AFTER each
+    #      nn.Linear does torch.empty(...) on the GPU at full size, so the
+    #      per-tensor GPU peak is the full weight (lm_head ~1.5GB) and 6 ranks
+    #      fill the card before partition can cut it down.
+    # The HF Trainer + accelerate path handles all of this correctly: it
+    # loads to CPU, wraps the model in its own ZeRO-3 init at prepare() time,
+    # and moves only per-rank shards to GPU. CPU peaks at ~64GB per rank
+    # transiently (384GB total across 6) but the host has 469GB free.
 
     # ---- tokenizer -------------------------------------------------------
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, trust_remote_code=True)
@@ -343,49 +326,19 @@ def main() -> None:
             bnb_4bit_compute_dtype=torch.bfloat16,
             bnb_4bit_quant_storage=torch.uint8,
         )
-    # ZeRO-3: load under deepspeed.zero.Init() so each parameter is partitioned
-    # across ranks AT CREATION TIME. The two naive paths both die in DS 0.19.4's
-    # _configure_distributed_model, which calls module.to(device) on whatever
-    # we hand it:
-    #   - full bf16 base loaded to CPU per rank -> .to() fills the 24GB GPU
-    #     and OOMs (64GB model, 24GB card).
-    #   - init_empty_weights (meta) -> .to() hits "Cannot copy out of meta
-    #     tensor; no data".
-    # zero.Init patches parameter creation so each rank only ever holds its
-    # 1/world_size partition (~11GB for 32B across 6 GPUs); the later .to() is
-    # then a no-op on already-placed shards. Requires the process group, which
-    # we initialized at the top of main(). low_cpu_mem_usage=True makes
-    # from_pretrained stream tensor-by-tensor from disk (meta init), so each
-    # rank's CPU peak is ~one tensor, not the full 64GB state_dict; without it
-    # every rank buffers the whole 64GB on CPU before partitioning (6x = 384GB
-    # transient). OS page cache dedupes the 6 disk reads to ~64GB of real I/O.
+    # Load the bf16 base. With --deepspeed, HF Trainer + accelerate takes
+    # over ZeRO-3 sharding at accelerator.prepare() time: it keeps the full
+    # model in CPU here, then moves only per-rank shards to GPU during init.
+    # We must NOT call deepspeed.zero.Init ourselves (see the NOTE at the top
+    # of main): it either doesn't shard (DSConfig.world_size==1) or hits a
+    # GPU peak before its partition cut runs.
+    # low_cpu_mem_usage=True streams the weights from disk (meta init then
+    # per-tensor load) so the per-rank CPU peak is ~64GB, not ~128GB (the
+    # default double-buffers the full state_dict + the model). 6 ranks x ~64GB
+    # = ~384GB transient, well under the host's 469GB free.
     if args.deepspeed:
-        from deepspeed import zero
-
-        # zero.Init parses the DS config immediately, before HF Trainer has a
-        # chance to fill the "auto" placeholders. Now that deepspeed.comm.
-        # init_distributed() has wired DS's comm layer onto the torch PG,
-        # DSConfig.world_size reads the real value (6), so train_batch_size
-        # must equal micro * grad_acc * world_size to pass the assertion.
-        world_size = (
-            torch.distributed.get_world_size()
-            if torch.distributed.is_initialized()
-            else 1
-        )
-        ds_config_dict = json.loads(
-            Path(args.deepspeed).read_text(encoding="utf-8")
-        )
-        micro = args.per_device_batch
-        accum = args.grad_accum
-        ds_config_dict["train_micro_batch_size_per_gpu"] = micro
-        ds_config_dict["gradient_accumulation_steps"] = accum
-        ds_config_dict["train_batch_size"] = micro * accum * world_size
-
         model_kwargs["low_cpu_mem_usage"] = True
-        with zero.Init(config_dict_or_path=ds_config_dict):
-            model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-    else:
-        model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
+    model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
     model.config.use_cache = False
     if hasattr(model, "gradient_checkpointing_enable"):
         model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
