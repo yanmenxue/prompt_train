@@ -1,0 +1,13 @@
+(python12) root@poissongpu006:/disk1/duhw/code/prompt_train# CUDA_VISIBLE_DEVICES=4,5,6,7 python lora_train/src/train_qlora.py  --max_steps 20 --max_samples 16 --per_device_batch 1 --deepspeed None --model_name ../../models/Qwen3_32B/ --attn_impl sdpa
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [03:14<00:00,  3.63it/s]
+Traceback (most recent call last):
+  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 291, in <module>
+    main()
+  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 223, in main
+    model = prepare_model_for_kbit_training(model)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/peft/utils/other.py", line 202, in prepare_model_for_kbit_training
+    param.data = param.data.to(torch.float32)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.90 GiB. GPU 0 has a total capacity of 23.56 GiB of which 1.66 GiB is free. Including non-PyTorch memory, this process has 21.89 GiB memory in use. Of the allocated memory 19.37 GiB is allocated by PyTorch, and 2.23 GiB is reserved by PyTorch but unallocated
