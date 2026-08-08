@@ -346,8 +346,26 @@ def main() -> None:
     if args.deepspeed:
         from deepspeed import zero
 
+        # zero.Init parses the DS config immediately, before HF Trainer has a
+        # chance to fill the "auto" placeholders. Resolve them now from the
+        # actual CLI args + world size so the batch assertion passes.
+        world_size = (
+            torch.distributed.get_world_size()
+            if torch.distributed.is_initialized()
+            else 1
+        )
+        ds_config_dict = json.loads(
+            Path(args.deepspeed).read_text(encoding="utf-8")
+        )
+        # Strip JSON comments (the file has a _comment field; keep it harmless).
+        micro = args.per_device_batch
+        accum = args.grad_accum
+        ds_config_dict["train_micro_batch_size_per_gpu"] = micro
+        ds_config_dict["gradient_accumulation_steps"] = accum
+        ds_config_dict["train_batch_size"] = micro * accum * world_size
+
         model_kwargs["low_cpu_mem_usage"] = True
-        with zero.Init(config_dict_or_path=args.deepspeed):
+        with zero.Init(config_dict=ds_config_dict):
             model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
     else:
         model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
