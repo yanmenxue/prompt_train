@@ -1,5 +1,5 @@
 {
-  "_comment": "DeepSpeed ZeRO-3 with optimizer offload for 8x3090 (24GB each) training Qwen3-32B QLoRA. bf16 compute, 16-step grad accumulation default.",
+  "_comment": "DeepSpeed ZeRO-3 for 4x3090 (24GB each) training Qwen3-32B with bf16 base (NOT 4bit). ZeRO-3 shards the 64GB bf16 base across 4 GPUs (~16GB each) + LoRA/optimizer/activations fit in ~22GB/card. If still OOM, enable cpu_offload in zero_optimization.",
   "steps_per_print": 10,
   "bf16": {
     "enabled": "auto"

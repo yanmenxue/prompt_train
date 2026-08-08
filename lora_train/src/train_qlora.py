@@ -137,7 +137,15 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--save_steps", type=int, default=200)
     p.add_argument("--eval_steps", type=int, default=100)
     p.add_argument("--logging_steps", type=int, default=5)
-    p.add_argument("--load_in_4bit", action="store_true", default=True)
+    p.add_argument(
+        "--load_in_4bit",
+        action="store_true",
+        default=False,
+        help="QLoRA 4bit base. Default False = bf16 full-precision base sharded "
+             "across GPUs via ZeRO-3 (recommended for 4x3090, avoids the 4bit "
+             "dequant OOM peak in backward). Set True only for single-GPU smoke "
+             "on smaller models.",
+    )
     p.add_argument("--bf16", action="store_true", default=True)
     p.add_argument(
         "--attn_impl",
@@ -376,14 +384,23 @@ def main() -> None:
         remove_unused_columns=False,
         deepspeed=args.deepspeed,
     )
-
-    trainer = BoundaryTrainer(
-        model=model,
-        args=targs,
-        train_dataset=train_ds,
-        eval_dataset=val_ds,
-        data_collator=collator,
-    )
+    # bf16 base + ZeRO-3: use the standard Trainer (default loss). ZeRO-3
+    #   must hook the model forward to all-gather sharded params; our custom
+    #   compute_loss bypasses accelerate via model.base_model.model, which
+    #   would skip that gather and break under ZeRO-3. bf16 logits are ~155MB
+    #   so the default loss's fp32 cast (~310MB) fits with sharded params.
+    # 4bit QLoRA single-GPU: use BoundaryTrainer to skip the convert_to_fp32
+    #   peak that OOMs a 24GB card holding the full 4bit base.
+    if args.load_in_4bit:
+        trainer = BoundaryTrainer(
+            model=model, args=targs, train_dataset=train_ds,
+            eval_dataset=val_ds, data_collator=collator,
+        )
+    else:
+        trainer = Trainer(
+            model=model, args=targs, train_dataset=train_ds,
+            eval_dataset=val_ds, data_collator=collator,
+        )
 
     trainer.train()
     trainer.save_model(args.output_dir)
