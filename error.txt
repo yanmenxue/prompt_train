@@ -1,5 +1,4 @@
- python <<'PY'                                                                                                                                                  
-  import torch, transformers, deepspeed, peft
-  print("torch", torch.__version__, "cuda", torch.version.cuda, "cudnn", torch.backends.cudnn.version())
-  print("transformers", transformers.__version__, "deepspeed", deepspeed.__version__, "peft", peft.__version__)
-  PY 
+>>> print("torch", torch.__version__, "cuda", torch.version.cuda, "cudnn", torch.backends.cudnn.version())
+torch 2.11.0+cu130 cuda 13.0 cudnn 91900
+>>> print("transformers", transformers.__version__, "deepspeed", deepspeed.__version__, "peft", peft.__version__)
+transformers 5.12.1 deepspeed 0.19.4 peft 0.20.0
