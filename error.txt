@@ -1,1 +1,9 @@
-nvidia-smi --query-gpu=index,memory.used,utilization.gpu --format=csv
+
+  PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+  CUDA_VISIBLE_DEVICES=2,3,4,5,6,7 \
+  deepspeed --num_gpus=6 lora_train/src/train_qlora.py \
+      --max_steps 20 --max_samples 16 \
+      --per_device_batch 1 --grad_accum 1 \
+      --model_name ../../models/Qwen3_32B/ \
+      --attn_impl sdpa \
+      --deepspeed lora_train/configs/ds_zero3_offload.json
