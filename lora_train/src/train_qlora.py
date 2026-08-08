@@ -153,6 +153,12 @@ def parse_args() -> argparse.Namespace:
         default="flash_attention_2",
         help="attention impl; falls back to sdpa if flash-attn not installed",
     )
+    # deepspeed/torchrun launcher passes --local_rank (or --local-rank) to
+    # every spawned process; argparse must accept it or the process exits
+    # with "unrecognized arguments". The value is read by transformers/HF
+    # internally via env (LOCAL_RANK), we just need to not choke on it.
+    p.add_argument("--local_rank", type=int, default=-1)
+    p.add_argument("--local-rank", dest="local_rank_dash", type=int, default=-1)
     args = p.parse_args()
     # argparse turns `--deepspeed None` into the STRING "None", not Python None.
     # transformers would then try to load a config file named "None" and fail.
