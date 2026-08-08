@@ -58,4 +58,4 @@ Map: 100%|███████████████████████�
 [2026-08-08 23:06:45,848] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2006531
 [2026-08-08 23:06:45,848] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2006532
 [2026-08-08 23:06:45,865] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2006533
-[2026-08-08 23:06:45,880] [ERROR] [launch.py:341:sigkill_handler] ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/tra
+[2026-08-08 23:06:45,880] [ERROR] [launch.py:341:sigkill_handler] ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = -11
