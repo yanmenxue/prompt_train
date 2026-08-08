@@ -1,7 +1,57 @@
-  PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+(python12) root@poissongpu006:/disk1/duhw/code/prompt_train#  PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
   CUDA_VISIBLE_DEVICES=4,5,6,7 python lora_train/src/train_qlora.py \
       --max_steps 20 --max_samples 16 \
       --per_device_batch 1 --grad_accum 1 \
       --deepspeed None \
       --model_name ../../models/Qwen3_32B/ \
       --attn_impl sdpa
+Loading weights: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:17<00:00, 39.84it/s]
+trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
+Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 342.56 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 222.66 examples/s]
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+  5%|████████████▏                                                                                                                                                                                                                                       | 1/20 [00:05<01:48,  5.71s/it]Traceback (most recent call last):
+  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 388, in <module>
+    main()
+  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 381, in main
+    trainer.train()
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
+    return inner_training_loop(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1515, in _inner_training_loop
+    self._run_epoch(
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1743, in _run_epoch
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1915, in training_step
+    loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 66, in compute_loss
+    outputs = model(**inputs)
+              ^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/utils/operations.py", line 943, in forward
+    return model_forward(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/utils/operations.py", line 931, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/utils/operations.py", line 910, in convert_to_fp32
+    return recursively_apply(_convert_to_fp32, tensor, test_type=_is_fp16_bf16_tensor)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/utils/operations.py", line 120, in recursively_apply
+    k: recursively_apply(
+       ^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/utils/operations.py", line 127, in recursively_apply
+    return func(data, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/utils/operations.py", line 902, in _convert_to_fp32
+    return tensor.float()
+           ^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 738.00 MiB. GPU 0 has a total capacity of 23.56 GiB of which 695.00 MiB is free. Including non-PyTorch memory, this process has 22.87 GiB memory in use. Of the allocated memory 22.07 GiB is allocated by PyTorch, and 496.23 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+  5%|████████████▏                                            
