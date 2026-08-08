@@ -1,4 +1,12 @@
-  python -c "import urllib.request;                                                                                                                              
-  src=urllib.request.urlopen('https://raw.githubusercontent.com/deepspeedai/DeepSpeed/v0.15.4/deepspeed/runtime/engine.py').read().decode();   
-  lines=src.split('\n'); import re; start=next(i for i,l in enumerate(lines) if '_configure_distributed_model' in l); end=next((i for i in
-  range(start+1,len(lines)) if re.match(r'    def [a-z]', lines[i])), start+60); print('\n'.join(lines[start:end]))" 
+  python -c "                                                                                                                                                    
+  from transformers import TrainingArguments                                                                                                                     
+  import inspect                                                                                                                                                 
+  # 确认 fsdp 参数还在                                                                                                                                           
+  sig = inspect.signature(TrainingArguments.__init__)                                                                                                            
+  fsdp_params = [p for p in sig.parameters if 'fsdp' in p.lower()]                                                                                               
+  print('fsdp params:', fsdp_params)                                                                                                                             
+  # 确认 Qwen3 的 decoder layer 类名                                                                                                                             
+  from transformers.models.qwen3 import modeling_qwen3                                                                                                           
+  layers = [n for n in dir(modeling_qwen3) if 'DecoderLayer' in n or 'Block' in n]                                                                               
+  print('Qwen3 layer classes:', layers)                                                                                                                          
+  "                  
