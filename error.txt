@@ -1,44 +1,125 @@
-(python12) root@poissongpu006:/disk1/duhw/code/prompt_train# python -c "import inspect, deepspeed; from deepspeed import zero; print('zero.Init signature:', inspect.signature(zero.Init.__init__)); print('---'); print(inspect.getsource(zero.Init.__init__)[:2000])"
-
-
-
-
-zero.Init signature: (self, module=None, data_parallel_group=None, mem_efficient_linear=True, remote_device=None, pin_memory=False, config_dict_or_path=None, config=None, enabled=True, dtype=None, mpu=None, zero_param_parallel_group=None, zero_quantized_weights=False, zero_quantized_nontrainable_weights=False, sequence_data_parallel_group=None, param_swapper=None, tensor_overrides=[<DeepSpeedTensorOverride.dtype: 1>, <DeepSpeedTensorOverride.device: 2>])
----
-    def __init__(self,
-                 module=None,
-                 data_parallel_group=None,
-                 mem_efficient_linear=True,
-                 remote_device=None,
-                 pin_memory=False,
-                 config_dict_or_path=None,
-                 config=None,
-                 enabled=True,
-                 dtype=None,
-                 mpu=None,
-                 zero_param_parallel_group=None,
-                 zero_quantized_weights=False,
-                 zero_quantized_nontrainable_weights=False,
-                 sequence_data_parallel_group=None,
-                 param_swapper=None,
-                 tensor_overrides=DEFAULT_TENSOR_OVERRIDES):
-        """A context to enable massive model construction for training with
-        ZeRO-3. Models are automatically partitioned (or, sharded) across the
-        system and converted to half precision.
-
-        Args:
-            module (``torch.nn.Module``, optional): If provided, partition the model as
-                if it was constructed in the context.
-            data_parallel_group (``deepspeed.comm`` process group, optional):
-                The group of processes to partition among. Defaults to all processes.
-                Synonymous with sequence data parallel group for param partitioning
-                across both sequence and data parallel groups.
-            mem_efficient_linear (bool, optional): Replace
-                torch.nn.functional.linear with an implementation that allows
-                DeepSpeed to partition parameters. Defaults to ``True``.
-            remote_device (string, optional): The initial device to store model
-                weights e.g., ``cpu``, ``nvme``. Passing ``"cpu"`` will create the model in CPU
-                memory. The model may still be moved to GPU based on the
-                offload settings for training. Defaults to param offload device if a config is
-                defined, otherwise GPU.
-            pin_memory (bool, optional): Potentially incre
+(python12) root@poissongpu006:/disk1/duhw/code/prompt_train# NCCL_IB_DISABLE=1   CUDA_VISIBLE_DEVICES=2,3,4,5,6,7   deepspeed lora_train/src/train_qlora.py       --max_steps 20 --max_samples 16       --per_device_batch 1 --grad_accum 1       --model_name ../../models/Qwen3_32B/       --attn_impl sdpa       --deepspeed lora_train/configs/ds_zero3_offload.json
+[2026-08-09 00:25:24,200] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+Detected VISIBLE_DEVICES=2,3,4,5,6,7: setting --include=localhost:2,3,4,5,6,7
+[2026-08-09 00:25:24,201] [INFO] [runner.py:630:main] cmd = /root/anaconda3/envs/python12/bin/python3.12 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMiwgMywgNCwgNSwgNiwgN119 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info lora_train/src/train_qlora.py --max_steps 20 --max_samples 16 --per_device_batch 1 --grad_accum 1 --model_name ../../models/Qwen3_32B/ --attn_impl sdpa --deepspeed lora_train/configs/ds_zero3_offload.json
+[2026-08-09 00:25:30,657] [INFO] [launch.py:155:main] 0 NCCL_IB_DISABLE=1
+[2026-08-09 00:25:30,657] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [2, 3, 4, 5, 6, 7]}
+[2026-08-09 00:25:30,657] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=6, node_rank=0
+[2026-08-09 00:25:30,657] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5]})
+[2026-08-09 00:25:30,657] [INFO] [launch.py:180:main] dist_world_size=6
+[2026-08-09 00:25:30,657] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=2,3,4,5,6,7
+[2026-08-09 00:25:30,658] [INFO] [launch.py:272:main] process 2031764 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=0', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:25:30,658] [INFO] [launch.py:272:main] process 2031765 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=1', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:25:30,659] [INFO] [launch.py:272:main] process 2031766 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=2', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:25:30,660] [INFO] [launch.py:272:main] process 2031767 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=3', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:25:30,660] [INFO] [launch.py:272:main] process 2031768 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=4', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-09 00:25:30,661] [INFO] [launch.py:272:main] process 2031769 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[rank4]: Traceback (most recent call last):
+[rank4]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 474, in <module>
+[rank4]:     main()
+[rank4]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 369, in main
+[rank4]:     with zero.Init(config_dict_or_path=ds_config_dict):
+[rank4]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 1049, in __init__
+[rank4]:     _ds_config = deepspeed.runtime.config.DeepSpeedConfig(config_dict_or_path,
+[rank4]:                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 781, in __init__
+[rank4]:     self._configure_train_batch_size()
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 978, in _configure_train_batch_size
+[rank4]:     self._batch_assertion()
+[rank4]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 924, in _batch_assertion
+[rank4]:     assert train_batch == micro_batch * grad_acc * self.world_size, (
+[rank4]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank4]: AssertionError: Check batch related parameters. train_batch_size is not equal to micro_batch_per_gpu * gradient_acc_step * world_size 6 != 1 * 1 * 1
+[rank3]: Traceback (most recent call last):
+[rank3]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 474, in <module>
+[rank3]:     main()
+[rank3]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 369, in main
+[rank3]:     with zero.Init(config_dict_or_path=ds_config_dict):
+[rank3]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 1049, in __init__
+[rank3]:     _ds_config = deepspeed.runtime.config.DeepSpeedConfig(config_dict_or_path,
+[rank3]:                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 781, in __init__
+[rank3]:     self._configure_train_batch_size()
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 978, in _configure_train_batch_size
+[rank3]:     self._batch_assertion()
+[rank3]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 924, in _batch_assertion
+[rank3]:     assert train_batch == micro_batch * grad_acc * self.world_size, (
+[rank3]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank3]: AssertionError: Check batch related parameters. train_batch_size is not equal to micro_batch_per_gpu * gradient_acc_step * world_size 6 != 1 * 1 * 1
+[rank5]: Traceback (most recent call last):
+[rank5]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 474, in <module>
+[rank5]:     main()
+[rank5]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 369, in main
+[rank5]:     with zero.Init(config_dict_or_path=ds_config_dict):
+[rank5]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 1049, in __init__
+[rank5]:     _ds_config = deepspeed.runtime.config.DeepSpeedConfig(config_dict_or_path,
+[rank5]:                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 781, in __init__
+[rank5]:     self._configure_train_batch_size()
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 978, in _configure_train_batch_size
+[rank5]:     self._batch_assertion()
+[rank5]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 924, in _batch_assertion
+[rank5]:     assert train_batch == micro_batch * grad_acc * self.world_size, (
+[rank5]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank5]: AssertionError: Check batch related parameters. train_batch_size is not equal to micro_batch_per_gpu * gradient_acc_step * world_size 6 != 1 * 1 * 1
+[rank2]: Traceback (most recent call last):
+[rank2]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 474, in <module>
+[rank2]:     main()
+[rank2]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 369, in main
+[rank2]:     with zero.Init(config_dict_or_path=ds_config_dict):
+[rank2]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 1049, in __init__
+[rank2]:     _ds_config = deepspeed.runtime.config.DeepSpeedConfig(config_dict_or_path,
+[rank2]:                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 781, in __init__
+[rank2]:     self._configure_train_batch_size()
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 978, in _configure_train_batch_size
+[rank2]:     self._batch_assertion()
+[rank2]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 924, in _batch_assertion
+[rank2]:     assert train_batch == micro_batch * grad_acc * self.world_size, (
+[rank2]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank2]: AssertionError: Check batch related parameters. train_batch_size is not equal to micro_batch_per_gpu * gradient_acc_step * world_size 6 != 1 * 1 * 1
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 474, in <module>
+[rank0]:     main()
+[rank0]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 369, in main
+[rank0]:     with zero.Init(config_dict_or_path=ds_config_dict):
+[rank0]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 1049, in __init__
+[rank0]:     _ds_config = deepspeed.runtime.config.DeepSpeedConfig(config_dict_or_path,
+[rank0]:                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 781, in __init__
+[rank0]:     self._configure_train_batch_size()
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 978, in _configure_train_batch_size
+[rank0]:     self._batch_assertion()
+[rank0]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 924, in _batch_assertion
+[rank0]:     assert train_batch == micro_batch * grad_acc * self.world_size, (
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]: AssertionError: Check batch related parameters. train_batch_size is not equal to micro_batch_per_gpu * gradient_acc_step * world_size 6 != 1 * 1 * 1
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 474, in <module>
+[rank1]:     main()
+[rank1]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 369, in main
+[rank1]:     with zero.Init(config_dict_or_path=ds_config_dict):
+[rank1]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 1049, in __init__
+[rank1]:     _ds_config = deepspeed.runtime.config.DeepSpeedConfig(config_dict_or_path,
+[rank1]:                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 781, in __init__
+[rank1]:     self._configure_train_batch_size()
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 978, in _configure_train_batch_size
+[rank1]:     self._batch_assertion()
+[rank1]:   File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/deepspeed/runtime/config.py", line 924, in _batch_assertion
+[rank1]:     assert train_batch == micro_batch * grad_acc * self.world_size, (
+[rank1]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]: AssertionError: Check batch related parameters. train_batch_size is not equal to micro_batch_per_gpu * gradient_acc_step * world_size 6 != 1 * 1 * 1
+[2026-08-09 00:25:43,663] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2031764
+[2026-08-09 00:25:43,706] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2031765
+[2026-08-09 00:25:43,706] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2031766
+[2026-08-09 00:25:43,736] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2031767
+[2026-08-09 00:25:43,756] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2031768
+[2026-08-09 00:25:43,773] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2031769
+[2026-08-09 00:25:43,789] [ERROR] [launch.py:341:sigkill_handler] ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = 1
