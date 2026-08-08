@@ -1,47 +1,63 @@
 (python12) root@poissongpu006:/disk1/duhw/code/prompt_train# CUDA_VISIBLE_DEVICES=4,5,6,7 python lora_train/src/train_qlora.py  --max_steps 20 --max_samples 16 --per_device_batch 1 --deepspeed None --model_name ../../models/Qwen3_32B/ --attn_impl sdpa --grad_accum 1
-Loading weights: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:18<00:00, 38.89it/s]
+Loading weights: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 707/707 [00:17<00:00, 39.72it/s]
 trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
-Map:   0%|                                                                                                                                                                                                                                                | 0/16 [00:00<?, ? examples/s][warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-[warn] prompt is not an exact prefix of full; dropping sample (prompt=2, full=2)
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 386.13 examples/s]
-Traceback (most recent call last):
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 308, in <module>
+Map: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 354.64 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 234.06 examples/s]
+[transformers] warmup_ratio is deprecated and will be removed in v5.2. Use `warmup_steps` instead.
+  5%|████████████▏                                                                                                                                                                                                                                       | 1/20 [00:05<01:50,  5.83s/it]Traceback (most recent call last):
+  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 340, in <module>
     main()
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 248, in main
-    train_ds = Dataset.from_list(train_rows).map(tokenize, remove_columns=["conversations"])
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 557, in wrapper
-    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
-                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3079, in map
-    for rank, done, content in Dataset._map_single(**dataset_kwargs):
-                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/datasets/arrow_dataset.py", line 3552, in _map_single
-    writer.finalize()
-  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/datasets/arrow_writer.py", line 657, in finalize
-    self.write_examples_on_file()
-  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/datasets/arrow_writer.py", line 510, in write_examples_on_file
-    self.write_batch(batch_examples=batch_examples)
-  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/datasets/arrow_writer.py", line 626, in write_batch
-    arrays.append(pa.array(typed_sequence))
-                  ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "pyarrow/array.pxi", line 281, in pyarrow.lib.array
-  File "pyarrow/array.pxi", line 118, in pyarrow.lib._handle_arrow_array_protocol
-  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/datasets/arrow_writer.py", line 303, in __arrow_array__
-    raise OverflowError(
-OverflowError: There was an overflow with type <class 'list'>. Try to reduce writer_batch_size to have batches smaller than 2GB.
-(Could not convert Encoding(num_tokens=254, attributes=[ids, type_ids, tokens, offsets, attention_mask, special_tokens_mask, overflowing]) with type tokenizers.Encoding: did not recognize Python value type when inferring an Arrow data type)
+  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 333, in main
+    trainer.train()
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1433, in train
+    return inner_training_loop(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1515, in _inner_training_loop
+    self._run_epoch(
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1743, in _run_epoch
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1915, in training_step
+    loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/trainer.py", line 1987, in compute_loss
+    outputs = model(**inputs)
+              ^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/utils/operations.py", line 943, in forward
+    return model_forward(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/accelerate/utils/operations.py", line 931, in __call__
+    return convert_to_fp32(self.model_forward(*args, **kwargs))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/amp/autocast_mode.py", line 44, in decorate_autocast
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/peft/peft_model.py", line 2101, in forward
+    return self.base_model(
+           ^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 333, in forward
+    return self.model.forward(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/utils/generic.py", line 907, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 509, in forward
+    loss = self.loss_function(logits=logits, labels=labels, vocab_size=self.config.vocab_size, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/python12/lib/python3.12/site-packages/transformers/loss/loss_utils.py", line 59, in ForCausalLMLoss
+    logits = logits.float()
+             ^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 738.00 MiB. GPU 0 has a total capacity of 23.56 GiB of which 263.00 MiB is free. Including non-PyTorch memory, this process has 23.29 GiB memory in use. Of the allocated memory 22.63 GiB is allocated by PyTorch, and 358.82 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+  5%|████████████▏   
