@@ -1,2 +1,26 @@
- python -c "import inspect, deepspeed.runtime.config as c; print(inspect.getsource(c.DeepSpeedConfig._batch_assertion)); print('===CONFIGURE==='); 
-  print(inspect.getsource(c.DeepSpeedConfig._configure_train_batch_size))" 
+(python12) root@poissongpu006:/disk1/duhw/code/prompt_train# python -c "import inspect, deepspeed.runtime.config as c; print(inspect.getsource(c.DeepSpeedConfig._batch_assertion)); print('===CONFIGURE==='); print(inspect.getsource(c.DeepSpeedConfig._configure_train_batch_size))"
+
+
+
+    def _batch_assertion(self):
+
+        train_batch = self.train_batch_size
+        micro_batch = self.train_micro_batch_size_per_gpu
+        grad_acc = self.gradient_accumulation_steps
+
+        assert (train_batch > 0), f"Train batch size: {train_batch} has to be greater than 0"
+
+        assert (micro_batch > 0), f"Micro batch size per gpu: {micro_batch} has to be greater than 0"
+
+        assert (grad_acc > 0), f"Gradient accumulation steps: {grad_acc} has to be greater than 0"
+
+        assert train_batch == micro_batch * grad_acc * self.world_size, (
+            f"Check batch related parameters. train_batch_size is not equal "
+            "to micro_batch_per_gpu * gradient_acc_step * world_size "
+            f"{train_batch} != {micro_batch} * {grad_acc} * {self.world_size}")
+
+===CONFIGURE===
+    def _configure_train_batch_size(self):
+        self._set_batch_related_parameters()
+        self._batch_assertion()
+
