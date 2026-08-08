@@ -1,5 +1,4 @@
-
-  PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+(python12) root@poissongpu006:/disk1/duhw/code/prompt_train# PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
   CUDA_VISIBLE_DEVICES=2,3,4,5,6,7 \
   deepspeed --num_gpus=6 lora_train/src/train_qlora.py \
       --max_steps 20 --max_samples 16 \
@@ -7,3 +6,48 @@
       --model_name ../../models/Qwen3_32B/ \
       --attn_impl sdpa \
       --deepspeed lora_train/configs/ds_zero3_offload.json
+[2026-08-08 22:56:30,586] [WARNING] [runner.py:232:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+Detected VISIBLE_DEVICES=2,3,4,5,6,7 but ignoring it because one or several of --include/--exclude/--num_gpus/--num_nodes cl args were used. If you want to use CUDA_VISIBLE_DEVICES don't pass any of these arguments to deepspeed.
+[2026-08-08 22:56:30,586] [INFO] [runner.py:630:main] cmd = /root/anaconda3/envs/python12/bin/python3.12 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMCwgMSwgMiwgMywgNCwgNV19 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None --log_level=info lora_train/src/train_qlora.py --max_steps 20 --max_samples 16 --per_device_batch 1 --grad_accum 1 --model_name ../../models/Qwen3_32B/ --attn_impl sdpa --deepspeed lora_train/configs/ds_zero3_offload.json
+[2026-08-08 22:56:36,940] [INFO] [launch.py:162:main] WORLD INFO DICT: {'localhost': [0, 1, 2, 3, 4, 5]}
+[2026-08-08 22:56:36,940] [INFO] [launch.py:168:main] nnodes=1, num_local_procs=6, node_rank=0
+[2026-08-08 22:56:36,940] [INFO] [launch.py:179:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5]})
+[2026-08-08 22:56:36,941] [INFO] [launch.py:180:main] dist_world_size=6
+[2026-08-08 22:56:36,941] [INFO] [launch.py:184:main] Setting CUDA_VISIBLE_DEVICES=0,1,2,3,4,5
+[2026-08-08 22:56:36,942] [INFO] [launch.py:272:main] process 2002328 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=0', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-08 22:56:36,942] [INFO] [launch.py:272:main] process 2002329 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=1', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-08 22:56:36,943] [INFO] [launch.py:272:main] process 2002330 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=2', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-08 22:56:36,943] [INFO] [launch.py:272:main] process 2002331 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=3', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-08 22:56:36,944] [INFO] [launch.py:272:main] process 2002332 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=4', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-08 22:56:36,945] [INFO] [launch.py:272:main] process 2002333 spawned with command: ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+usage: train_qlora.py [-h] [--model_name MODEL_NAME] [--train_file TRAIN_FILE] [--val_file VAL_FILE] [--output_dir OUTPUT_DIR] [--deepspeed DEEPSPEED] [--max_length MAX_LENGTH] [--max_samples MAX_SAMPLES] [--per_device_batch PER_DEVICE_BATCH] [--grad_accum GRAD_ACCUM] [--lr LR]
+                      [--epochs EPOCHS] [--max_steps MAX_STEPS] [--warmup_ratio WARMUP_RATIO] [--lora_rank LORA_RANK] [--lora_alpha LORA_ALPHA] [--lora_dropout LORA_DROPOUT] [--seed SEED] [--save_steps SAVE_STEPS] [--eval_steps EVAL_STEPS] [--logging_steps LOGGING_STEPS]
+                      [--load_in_4bit] [--bf16] [--attn_impl {flash_attention_2,sdpa,eager}]
+train_qlora.py: error: unrecognized arguments: --local_rank=4
+usage: train_qlora.py [-h] [--model_name MODEL_NAME] [--train_file TRAIN_FILE] [--val_file VAL_FILE] [--output_dir OUTPUT_DIR] [--deepspeed DEEPSPEED] [--max_length MAX_LENGTH] [--max_samples MAX_SAMPLES] [--per_device_batch PER_DEVICE_BATCH] [--grad_accum GRAD_ACCUM] [--lr LR]
+                      [--epochs EPOCHS] [--max_steps MAX_STEPS] [--warmup_ratio WARMUP_RATIO] [--lora_rank LORA_RANK] [--lora_alpha LORA_ALPHA] [--lora_dropout LORA_DROPOUT] [--seed SEED] [--save_steps SAVE_STEPS] [--eval_steps EVAL_STEPS] [--logging_steps LOGGING_STEPS]
+                      [--load_in_4bit] [--bf16] [--attn_impl {flash_attention_2,sdpa,eager}]
+train_qlora.py: error: unrecognized arguments: --local_rank=3
+usage: train_qlora.py [-h] [--model_name MODEL_NAME] [--train_file TRAIN_FILE] [--val_file VAL_FILE] [--output_dir OUTPUT_DIR] [--deepspeed DEEPSPEED] [--max_length MAX_LENGTH] [--max_samples MAX_SAMPLES] [--per_device_batch PER_DEVICE_BATCH] [--grad_accum GRAD_ACCUM] [--lr LR]
+                      [--epochs EPOCHS] [--max_steps MAX_STEPS] [--warmup_ratio WARMUP_RATIO] [--lora_rank LORA_RANK] [--lora_alpha LORA_ALPHA] [--lora_dropout LORA_DROPOUT] [--seed SEED] [--save_steps SAVE_STEPS] [--eval_steps EVAL_STEPS] [--logging_steps LOGGING_STEPS]
+                      [--load_in_4bit] [--bf16] [--attn_impl {flash_attention_2,sdpa,eager}]
+train_qlora.py: error: unrecognized arguments: --local_rank=1
+usage: train_qlora.py [-h] [--model_name MODEL_NAME] [--train_file TRAIN_FILE] [--val_file VAL_FILE] [--output_dir OUTPUT_DIR] [--deepspeed DEEPSPEED] [--max_length MAX_LENGTH] [--max_samples MAX_SAMPLES] [--per_device_batch PER_DEVICE_BATCH] [--grad_accum GRAD_ACCUM] [--lr LR]
+                      [--epochs EPOCHS] [--max_steps MAX_STEPS] [--warmup_ratio WARMUP_RATIO] [--lora_rank LORA_RANK] [--lora_alpha LORA_ALPHA] [--lora_dropout LORA_DROPOUT] [--seed SEED] [--save_steps SAVE_STEPS] [--eval_steps EVAL_STEPS] [--logging_steps LOGGING_STEPS]
+                      [--load_in_4bit] [--bf16] [--attn_impl {flash_attention_2,sdpa,eager}]
+train_qlora.py: error: unrecognized arguments: --local_rank=2
+usage: train_qlora.py [-h] [--model_name MODEL_NAME] [--train_file TRAIN_FILE] [--val_file VAL_FILE] [--output_dir OUTPUT_DIR] [--deepspeed DEEPSPEED] [--max_length MAX_LENGTH] [--max_samples MAX_SAMPLES] [--per_device_batch PER_DEVICE_BATCH] [--grad_accum GRAD_ACCUM] [--lr LR]
+                      [--epochs EPOCHS] [--max_steps MAX_STEPS] [--warmup_ratio WARMUP_RATIO] [--lora_rank LORA_RANK] [--lora_alpha LORA_ALPHA] [--lora_dropout LORA_DROPOUT] [--seed SEED] [--save_steps SAVE_STEPS] [--eval_steps EVAL_STEPS] [--logging_steps LOGGING_STEPS]
+                      [--load_in_4bit] [--bf16] [--attn_impl {flash_attention_2,sdpa,eager}]
+train_qlora.py: error: unrecognized arguments: --local_rank=0
+usage: train_qlora.py [-h] [--model_name MODEL_NAME] [--train_file TRAIN_FILE] [--val_file VAL_FILE] [--output_dir OUTPUT_DIR] [--deepspeed DEEPSPEED] [--max_length MAX_LENGTH] [--max_samples MAX_SAMPLES] [--per_device_batch PER_DEVICE_BATCH] [--grad_accum GRAD_ACCUM] [--lr LR]
+                      [--epochs EPOCHS] [--max_steps MAX_STEPS] [--warmup_ratio WARMUP_RATIO] [--lora_rank LORA_RANK] [--lora_alpha LORA_ALPHA] [--lora_dropout LORA_DROPOUT] [--seed SEED] [--save_steps SAVE_STEPS] [--eval_steps EVAL_STEPS] [--logging_steps LOGGING_STEPS]
+                      [--load_in_4bit] [--bf16] [--attn_impl {flash_attention_2,sdpa,eager}]
+train_qlora.py: error: unrecognized arguments: --local_rank=5
+[2026-08-08 22:56:47,947] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2002328
+[2026-08-08 22:56:47,989] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2002329
+[2026-08-08 22:56:48,018] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2002330
+[2026-08-08 22:56:48,018] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2002331
+[2026-08-08 22:56:48,038] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2002332
+[2026-08-08 22:56:48,054] [INFO] [launch.py:335:sigkill_handler] Killing subprocess 2002333
+[2026-08-08 22:56:48,070] [ERROR] [launch.py:341:sigkill_handler] ['/root/anaconda3/envs/python12/bin/python3.12', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = 2
