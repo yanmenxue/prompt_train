@@ -84,7 +84,19 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--logging_steps", type=int, default=5)
     p.add_argument("--load_in_4bit", action="store_true", default=True)
     p.add_argument("--bf16", action="store_true", default=True)
-    return p.parse_args()
+    p.add_argument(
+        "--attn_impl",
+        choices=("flash_attention_2", "sdpa", "eager"),
+        default="flash_attention_2",
+        help="attention impl; falls back to sdpa if flash-attn not installed",
+    )
+    args = p.parse_args()
+    # argparse turns `--deepspeed None` into the STRING "None", not Python None.
+    # transformers would then try to load a config file named "None" and fail.
+    # Normalize: "none"/"None"/"" -> None.
+    if isinstance(args.deepspeed, str) and args.deepspeed.strip().lower() in {"none", ""}:
+        args.deepspeed = None
+    return args
 
 
 def load_sharegpt(path: Path, max_samples: int | None = None) -> list[dict]:
@@ -119,23 +131,28 @@ def build_tokenize_fn(tokenizer: Any, max_length: int):
             {"role": "user", "content": convs[1]["value"]},
             {"role": "assistant", "content": label},
         ]
-        messages_prompt = messages_full[:-1]
 
-        full_ids = tokenizer.apply_chat_template(
+        # Use the tokenizer's native assistant-token mask. This is robust
+        # against chat-template token-boundary quirks (BOS/im_start placement
+        # at the generation_prompt<->assistant seam) that would silently
+        # mis-align a hand-rolled prompt/completion slice.
+        enc = tokenizer.apply_chat_template(
             messages_full,
             tokenize=True,
             add_generation_prompt=False,
             enable_thinking=False,
+            return_dict=True,
+            return_assistant_tokens_mask=True,
         )
-        prompt_ids = tokenizer.apply_chat_template(
-            messages_prompt,
-            tokenize=True,
-            add_generation_prompt=True,   # ends right before assistant turn
-            enable_thinking=False,
-        )
-        # Loss mask: ignore everything except the assistant response tokens.
-        labels = [-100] * len(prompt_ids) + full_ids[len(prompt_ids):]
-        input_ids = full_ids
+        input_ids: list[int] = enc["input_ids"]
+        assistant_mask: list[int] = enc.get("assistant_masks", [])
+        if len(assistant_mask) != len(input_ids):
+            # template didn't support assistant masks; fall back to masking
+            # everything (loss will be 0 -> caller should switch template).
+            print("[warn] assistant_masks length mismatch; masking all tokens", flush=True)
+            labels = [-100] * len(input_ids)
+        else:
+            labels = [tok if mask == 1 else -100 for tok, mask in zip(input_ids, assistant_mask)]
 
         # Truncate from the left if too long (keep the assistant tail).
         if len(input_ids) > max_length:
@@ -161,10 +178,20 @@ def main() -> None:
         tokenizer.pad_token = tokenizer.eos_token
 
     # ---- model (QLoRA: nf4 base, bf16 compute) ---------------------------
+    # Resolve attention impl: flash_attention_2 if available, else sdpa.
+    # flash-attn install is fiddly (needs matching CUDA/torch); sdpa is
+    # built into torch and is plenty fast for the short sequences here.
+    attn_impl = args.attn_impl
+    if attn_impl == "flash_attention_2":
+        try:
+            import flash_attn  # noqa: F401
+        except Exception:
+            print("[warn] flash-attn not installed; falling back to sdpa", flush=True)
+            attn_impl = "sdpa"
     model_kwargs: dict[str, Any] = {
         "trust_remote_code": True,
         "torch_dtype": torch.bfloat16,
-        "attn_implementation": "flash_attention_2",
+        "attn_implementation": attn_impl,
     }
     if args.load_in_4bit:
         from transformers import BitsAndBytesConfig

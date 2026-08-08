@@ -107,7 +107,12 @@ BUCKET_TARGETS: list[tuple[str, str, str, int]] = [
     ("reject_general_task",      "NoStock", "NoProduct",        2),
     ("reject_chitchat",          "NoStock", "NoProduct",        2),
     ("reject_ambiguous",         "NoStock", "NoProduct",        2),
-    ("reject_multi_intent",      "NoStock", "MultiProduct",     4),  # 32B fails here
+    # NOTE: reject_multi_intent is a *mixed* bucket in the benchmark (12 null,
+    # 5 SearchStockQuotes, 3 RecommendProduct). We generate toward the
+    # dominant null case here; the route-positive sub-cases are covered by
+    # stock_current_quote / product_* buckets. Lower weight to avoid
+    # over-generating the ambiguous case.
+    ("reject_multi_intent",      "NoStock", "MultiProduct",     2),
     ("reject_prompt_distractor", "NoStock", "NoProduct",        2),
     # --- production regression families (32B fails on some) ---
     ("production_regression_SearchStockQuotes", "StockRoute", "NoProduct", 3),
@@ -238,8 +243,6 @@ def build_gen_messages(
     product_id: str,
     style_examples: list[dict],
 ) -> list[dict]:
-    import textwrap
-
     examples_text = "\n".join(
         f"- [{i}] current_user_request: {c['messages'][-1]['content']}"
         for i, c in enumerate(style_examples[:3], 1)
@@ -357,20 +360,18 @@ def _norm(s: str) -> str:
 
 
 def too_close_to_benchmark(messages: list[dict], guard: set[str]) -> bool:
-    """Reject if the current user request is a near-substring of a benchmark one
-    or vice-versa (length-aware). Catches accidental copying."""
-    cur = _norm(messages[-1]["content"])
-    if len(cur) < 4:
-        return True
-    for b in guard:
-        nb = _norm(b)
-        if len(nb) < 4:
+    """Reject if any turn overlaps a benchmark current_user_request. Catches
+    accidental copying of benchmark phrasing into the generated conversation."""
+    normed_guard = {_norm(g) for g in guard}
+    for m in messages:
+        cur = _norm(m.get("content", ""))
+        if len(cur) < 4:
             continue
-        if cur == nb or cur in nb or nb in cur:
-            return True
-    # also reject exact multi-turn copies
-    if any(_norm(m["content"]) in guard or _norm(m["content"]) in {_norm(g) for g in guard} for m in messages):
-        pass
+        for nb in normed_guard:
+            if len(nb) < 4:
+                continue
+            if cur == nb or cur in nb or nb in cur:
+                return True
     return False
 
 
