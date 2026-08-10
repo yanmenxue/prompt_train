@@ -484,6 +484,13 @@ def main() -> None:
     tokenizer.save_pretrained(args.output_dir)
     print("Training complete. Adapter saved to", args.output_dir)
 
+    # Explicitly tear down the process group so NCCL ranks exit cleanly.
+    # Without this, FSDP's per-rank destructors serialize and the process
+    # hangs for tens of seconds after the final print while ranks wait on
+    # each other's NCCL barrier during GC.
+    if args.fsdp and torch.distributed.is_initialized():
+        torch.distributed.destroy_process_group()
+
 
 if __name__ == "__main__":
     main()
