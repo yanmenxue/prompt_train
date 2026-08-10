@@ -1,2 +1,6 @@
-python -c "import inspect; from transformers import TrainingArguments; sig=inspect.signature(TrainingArguments.__init__); [print(p, '=', p.default) for p in   
+(ds_train) root@poissongpu006:~# python -c "import inspect; from transformers import TrainingArguments; sig=inspect.signature(TrainingArguments.__init__); [print(p, '=', p.default) for p in
   sig.parameters.values() if 'fsdp' in p.name.lower()]"
+fsdp: Union[list[transformers.trainer_utils.FSDPOption], str, NoneType] = '' =
+fsdp_min_num_params: int = 0 = 0
+fsdp_config: Union[dict, str, NoneType] = None = None
+fsdp_transformer_layer_cls_to_wrap: Optional[str] = None = None
