@@ -1,10 +1,8 @@
-   python -c "
-  import transformers, os
-  p = os.path.join(os.path.dirname(transformers.__file__), 'trainer.py')
-  print('trainer.py:', p)                                                                                                                                        
-  src = open(p).read()                                                                                                                                           
-  # 找 fsdp 处理的关键行                                                                                                                                         
-  for i, l in enumerate(src.split('\n'), 1):                                                                                                                     
-      if 'fsdp_transformer_layer_cls_to_wrap' in l or 'fsdp_auto_wrap_policy' in l or ('load_best_model_at_end' in l and 'fsdp' in l.lower()):                   
-          print(f'{i}: {l.strip()[:100]}')                                                                                                                       
-  " 2>&1 | head -30
+(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train# python test.py
+trainer.py: /root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/trainer.py
+2036: fsdp_transformer_layer_cls_to_wrap = self.args.fsdp_config.get(
+2044: elif fsdp_transformer_layer_cls_to_wrap is not None:
+2046: for layer_class in fsdp_transformer_layer_cls_to_wrap:
+5184: # `save_only_model` can't be used with DeepSpeed/FSDP along with `load_best_model_at_end`
+5224: from peft.utils.other import fsdp_auto_wrap_policy
+5227: self.accelerator.state.fsdp_plugin.auto_wrap_policy = fsdp_auto_wrap_policy(self.model)
