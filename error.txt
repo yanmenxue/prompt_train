@@ -1,246 +1,253 @@
-(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train# NCCL_IB_DISABLE=1 \
-  CUDA_VISIBLE_DEVICES=2,3,4,5,6,7 \
-  deepspeed lora_train/src/train_qlora.py \
-      --max_steps 20 --max_samples 16 \
-      --per_device_batch 1 --grad_accum 1 \
-      --model_name ../../models/Qwen3_32B/ \
-      --attn_impl sdpa \
-      --deepspeed lora_train/configs/ds_zero3_offload.json
-[2026-08-10 10:34:28,393] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:34:30,971] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
-Detected VISIBLE_DEVICES=2,3,4,5,6,7: setting --include=localhost:2,3,4,5,6,7
-[2026-08-10 10:34:30,971] [INFO] [runner.py:607:main] cmd = /root/anaconda3/envs/ds_train/bin/python3.11 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMiwgMywgNCwgNSwgNiwgN119 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None lora_train/src/train_qlora.py --max_steps 20 --max_samples 16 --per_device_batch 1 --grad_accum 1 --model_name ../../models/Qwen3_32B/ --attn_impl sdpa --deepspeed lora_train/configs/ds_zero3_offload.json
-[2026-08-10 10:34:32,546] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:34:34,889] [INFO] [launch.py:139:main] 0 NCCL_IB_DISABLE=1
-[2026-08-10 10:34:34,889] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [2, 3, 4, 5, 6, 7]}
-[2026-08-10 10:34:34,889] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=6, node_rank=0
-[2026-08-10 10:34:34,889] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5]})
-[2026-08-10 10:34:34,889] [INFO] [launch.py:164:main] dist_world_size=6
-[2026-08-10 10:34:34,889] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=2,3,4,5,6,7
-[2026-08-10 10:34:34,890] [INFO] [launch.py:256:main] process 2623702 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=0', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-10 10:34:34,891] [INFO] [launch.py:256:main] process 2623703 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=1', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-10 10:34:34,891] [INFO] [launch.py:256:main] process 2623704 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=2', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-10 10:34:34,892] [INFO] [launch.py:256:main] process 2623705 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=3', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-10 10:34:34,892] [INFO] [launch.py:256:main] process 2623706 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=4', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-10 10:34:34,893] [INFO] [launch.py:256:main] process 2623707 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-10 10:34:38,829] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:34:39,510] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:34:39,616] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:34:39,641] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:34:39,647] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:34:39,647] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-Traceback (most recent call last):
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 104, in <module>
-    from intent_router.router import _STOCK_SYSTEM_PROMPT, _PRODUCT_SYSTEM_PROMPT  # type: ignore
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/disk1/duhw/code/prompt_train/intent_router/__init__.py", line 3, in <module>
-    from .router import (
-  File "/disk1/duhw/code/prompt_train/intent_router/router.py", line 15, in <module>
-    from openai import OpenAI
-ModuleNotFoundError: No module named 'openai'
-Traceback (most recent call last):
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 104, in <module>
-    from intent_router.router import _STOCK_SYSTEM_PROMPT, _PRODUCT_SYSTEM_PROMPT  # type: ignore
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/disk1/duhw/code/prompt_train/intent_router/__init__.py", line 3, in <module>
-    from .router import (
-  File "/disk1/duhw/code/prompt_train/intent_router/router.py", line 15, in <module>
-    from openai import OpenAI
-ModuleNotFoundError: No module named 'openai'
-Traceback (most recent call last):
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 104, in <module>
-    from intent_router.router import _STOCK_SYSTEM_PROMPT, _PRODUCT_SYSTEM_PROMPT  # type: ignore
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/disk1/duhw/code/prompt_train/intent_router/__init__.py", line 3, in <module>
-    from .router import (
-  File "/disk1/duhw/code/prompt_train/intent_router/router.py", line 15, in <module>
-    from openai import OpenAI
-ModuleNotFoundError: No module named 'openai'
-Traceback (most recent call last):
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 104, in <module>
-    from intent_router.router import _STOCK_SYSTEM_PROMPT, _PRODUCT_SYSTEM_PROMPT  # type: ignore
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/disk1/duhw/code/prompt_train/intent_router/__init__.py", line 3, in <module>
-    from .router import (
-  File "/disk1/duhw/code/prompt_train/intent_router/router.py", line 15, in <module>
-    from openai import OpenAI
-ModuleNotFoundError: No module named 'openai'
-Traceback (most recent call last):
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 104, in <module>
-    from intent_router.router import _STOCK_SYSTEM_PROMPT, _PRODUCT_SYSTEM_PROMPT  # type: ignore
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/disk1/duhw/code/prompt_train/intent_router/__init__.py", line 3, in <module>
-    from .router import (
-  File "/disk1/duhw/code/prompt_train/intent_router/router.py", line 15, in <module>
-    from openai import OpenAI
-ModuleNotFoundError: No module named 'openai'
-Traceback (most recent call last):
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 104, in <module>
-    from intent_router.router import _STOCK_SYSTEM_PROMPT, _PRODUCT_SYSTEM_PROMPT  # type: ignore
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/disk1/duhw/code/prompt_train/intent_router/__init__.py", line 3, in <module>
-    from .router import (
-  File "/disk1/duhw/code/prompt_train/intent_router/router.py", line 15, in <module>
-    from openai import OpenAI
-ModuleNotFoundError: No module named 'openai'
-[2026-08-10 10:34:41,894] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2623702
-[2026-08-10 10:34:42,057] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2623703
-[2026-08-10 10:34:42,088] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2623704
-[2026-08-10 10:34:42,117] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2623705
-[2026-08-10 10:34:42,137] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2623706
-[2026-08-10 10:34:42,153] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2623707
-[2026-08-10 10:34:42,153] [ERROR] [launch.py:325:sigkill_handler] ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = 1
-(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train#
-(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train# pip install openai
-Looking in indexes: http://mirrors.tools.huawei.com/pypi/simple/
-Collecting openai
-  Downloading openai-2.53.0-py3-none-any.whl (1.7 MB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 15.0 MB/s  0:00:00
-Requirement already satisfied: anyio<5,>=3.5.0 in /root/anaconda3/envs/ds_train/lib/python3.11/site-packages (from openai) (4.14.2)
-Collecting distro<2,>=1.7.0 (from openai)
-  Downloading distro-1.9.0-py3-none-any.whl (20 kB)
-Requirement already satisfied: httpx<1,>=0.23.0 in /root/anaconda3/envs/ds_train/lib/python3.11/site-packages (from openai) (0.28.1)
-Collecting jiter<1,>=0.10.0 (from openai)
-  Downloading jiter-0.16.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (347 kB)
-Requirement already satisfied: pydantic<3,>=1.9.0 in /root/anaconda3/envs/ds_train/lib/python3.11/site-packages (from openai) (2.13.4)
-Collecting sniffio (from openai)
-  Downloading sniffio-1.3.1-py3-none-any.whl (10 kB)
-Requirement already satisfied: tqdm>4 in /root/anaconda3/envs/ds_train/lib/python3.11/site-packages (from openai) (4.70.0)
-Requirement already satisfied: typing-extensions<5,>=4.14 in /root/anaconda3/envs/ds_train/lib/python3.11/site-packages (from openai) (4.16.0)
-Requirement already satisfied: idna>=2.8 in /root/anaconda3/envs/ds_train/lib/python3.11/site-packages (from anyio<5,>=3.5.0->openai) (3.18)
-Requirement already satisfied: certifi in /root/anaconda3/envs/ds_train/lib/python3.11/site-packages (from httpx<1,>=0.23.0->openai) (2026.7.22)
-Requirement already satisfied: httpcore==1.* in /root/anaconda3/envs/ds_train/lib/python3.11/site-packages (from httpx<1,>=0.23.0->openai) (1.0.9)
-Requirement already satisfied: h11>=0.16 in /root/anaconda3/envs/ds_train/lib/python3.11/site-packages (from httpcore==1.*->httpx<1,>=0.23.0->openai) (0.16.0)
-Requirement already satisfied: annotated-types>=0.6.0 in /root/anaconda3/envs/ds_train/lib/python3.11/site-packages (from pydantic<3,>=1.9.0->openai) (0.8.0)
-Requirement already satisfied: pydantic-core==2.46.4 in /root/anaconda3/envs/ds_train/lib/python3.11/site-packages (from pydantic<3,>=1.9.0->openai) (2.46.4)
-Requirement already satisfied: typing-inspection>=0.4.2 in /root/anaconda3/envs/ds_train/lib/python3.11/site-packages (from pydantic<3,>=1.9.0->openai) (0.4.2)
-Installing collected packages: sniffio, jiter, distro, openai
-Successfully installed distro-1.9.0 jiter-0.16.0 openai-2.53.0 sniffio-1.3.1
-WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
 (ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train# NCCL_IB_DISABLE=1   CUDA_VISIBLE_DEVICES=2,3,4,5,6,7   deepspeed lora_train/src/train_qlora.py       --max_steps 20 --max_samples 16       --per_device_batch 1 --grad_accum 1       --model_name ../../models/Qwen3_32B/       --attn_impl sdpa       --deepspeed lora_train/configs/ds_zero3_offload.json
-[2026-08-10 10:34:54,729] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:34:56,883] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
+[2026-08-10 10:38:46,366] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-10 10:38:48,729] [WARNING] [runner.py:215:fetch_hostfile] Unable to find hostfile, will proceed with training with local resources only.
 Detected VISIBLE_DEVICES=2,3,4,5,6,7: setting --include=localhost:2,3,4,5,6,7
-[2026-08-10 10:34:56,883] [INFO] [runner.py:607:main] cmd = /root/anaconda3/envs/ds_train/bin/python3.11 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMiwgMywgNCwgNSwgNiwgN119 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None lora_train/src/train_qlora.py --max_steps 20 --max_samples 16 --per_device_batch 1 --grad_accum 1 --model_name ../../models/Qwen3_32B/ --attn_impl sdpa --deepspeed lora_train/configs/ds_zero3_offload.json
-[2026-08-10 10:34:58,418] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:35:00,581] [INFO] [launch.py:139:main] 0 NCCL_IB_DISABLE=1
-[2026-08-10 10:35:00,581] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [2, 3, 4, 5, 6, 7]}
-[2026-08-10 10:35:00,581] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=6, node_rank=0
-[2026-08-10 10:35:00,581] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5]})
-[2026-08-10 10:35:00,581] [INFO] [launch.py:164:main] dist_world_size=6
-[2026-08-10 10:35:00,581] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=2,3,4,5,6,7
-[2026-08-10 10:35:00,582] [INFO] [launch.py:256:main] process 2624533 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=0', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-10 10:35:00,583] [INFO] [launch.py:256:main] process 2624534 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=1', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-10 10:35:00,583] [INFO] [launch.py:256:main] process 2624535 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=2', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-10 10:35:00,584] [INFO] [launch.py:256:main] process 2624536 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=3', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-10 10:35:00,584] [INFO] [launch.py:256:main] process 2624537 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=4', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-10 10:35:00,585] [INFO] [launch.py:256:main] process 2624538 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
-[2026-08-10 10:35:05,154] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:35:05,248] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:35:05,414] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:35:05,426] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:35:05,438] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
-[2026-08-10 10:35:05,458] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-10 10:38:48,729] [INFO] [runner.py:607:main] cmd = /root/anaconda3/envs/ds_train/bin/python3.11 -u -m deepspeed.launcher.launch --world_info=eyJsb2NhbGhvc3QiOiBbMiwgMywgNCwgNSwgNiwgN119 --master_addr=127.0.0.1 --master_port=29500 --enable_each_rank_log=None lora_train/src/train_qlora.py --max_steps 20 --max_samples 16 --per_device_batch 1 --grad_accum 1 --model_name ../../models/Qwen3_32B/ --attn_impl sdpa --deepspeed lora_train/configs/ds_zero3_offload.json
+[2026-08-10 10:38:50,281] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-10 10:38:52,598] [INFO] [launch.py:139:main] 0 NCCL_IB_DISABLE=1
+[2026-08-10 10:38:52,598] [INFO] [launch.py:146:main] WORLD INFO DICT: {'localhost': [2, 3, 4, 5, 6, 7]}
+[2026-08-10 10:38:52,598] [INFO] [launch.py:152:main] nnodes=1, num_local_procs=6, node_rank=0
+[2026-08-10 10:38:52,598] [INFO] [launch.py:163:main] global_rank_mapping=defaultdict(<class 'list'>, {'localhost': [0, 1, 2, 3, 4, 5]})
+[2026-08-10 10:38:52,598] [INFO] [launch.py:164:main] dist_world_size=6
+[2026-08-10 10:38:52,598] [INFO] [launch.py:168:main] Setting CUDA_VISIBLE_DEVICES=2,3,4,5,6,7
+[2026-08-10 10:38:52,599] [INFO] [launch.py:256:main] process 2625648 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=0', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-10 10:38:52,599] [INFO] [launch.py:256:main] process 2625649 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=1', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-10 10:38:52,600] [INFO] [launch.py:256:main] process 2625650 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=2', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-10 10:38:52,600] [INFO] [launch.py:256:main] process 2625651 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=3', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-10 10:38:52,601] [INFO] [launch.py:256:main] process 2625652 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=4', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-10 10:38:52,602] [INFO] [launch.py:256:main] process 2625653 spawned with command: ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json']
+[2026-08-10 10:38:56,090] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-10 10:38:57,119] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-10 10:38:57,257] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-10 10:38:57,356] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-10 10:38:57,366] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-10 10:38:57,383] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 17/17 [00:00<00:00, 195.24it/s]
 Traceback (most recent call last):
   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 443, in <module>
     main()
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 341, in main
-    model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrained
-    return model_class.from_pretrained(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 4343, in from_pretrained
-    model = cls(config, *model_args, **model_kwargs)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: Qwen3ForCausalLM.__init__() got an unexpected keyword argument 'dtype'
+  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 360, in main
+    model = get_peft_model(model, lora_config)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/mapping.py", line 222, in get_peft_model
+    return MODEL_TYPE_TO_PEFT_MODEL_MAPPING[peft_config.task_type](
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/peft_model.py", line 1684, in __init__
+    super().__init__(model, peft_config, adapter_name, **kwargs)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/peft_model.py", line 176, in __init__
+    self.base_model = cls(model, {adapter_name: peft_config}, adapter_name)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 141, in __init__
+    super().__init__(model, config, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 184, in __init__
+    self.inject_adapter(self.model, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 501, in inject_adapter
+    self._create_and_replace(peft_config, adapter_name, target, target_name, parent, current_key=key)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 235, in _create_and_replace
+    new_module = self._create_new_module(lora_config, adapter_name, target, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 330, in _create_new_module
+    from .bnb import dispatch_bnb_8bit
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/bnb.py", line 19, in <module>
+    import bitsandbytes as bnb
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/__init__.py", line 15, in <module>
+    from .nn import modules
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/nn/__init__.py", line 21, in <module>
+    from .triton_based_modules import (
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/nn/triton_based_modules.py", line 7, in <module>
+    from bitsandbytes.triton.int8_matmul_mixed_dequantize import (
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/triton/int8_matmul_mixed_dequantize.py", line 12, in <module>
+    from triton.ops.matmul_perf_model import early_config_prune, estimate_matmul_time
+ModuleNotFoundError: No module named 'triton.ops'
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 17/17 [00:00<00:00, 196.64it/s]
 Traceback (most recent call last):
   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 443, in <module>
     main()
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 341, in main
-    model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrained
-    return model_class.from_pretrained(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 4343, in from_pretrained
-    model = cls(config, *model_args, **model_kwargs)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: Qwen3ForCausalLM.__init__() got an unexpected keyword argument 'dtype'
-Traceback (most recent call last):
+  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 360, in main
+    model = get_peft_model(model, lora_config)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/mapping.py", line 222, in get_peft_model
+    return MODEL_TYPE_TO_PEFT_MODEL_MAPPING[peft_config.task_type](
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/peft_model.py", line 1684, in __init__
+    super().__init__(model, peft_config, adapter_name, **kwargs)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/peft_model.py", line 176, in __init__
+    self.base_model = cls(model, {adapter_name: peft_config}, adapter_name)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 141, in __init__
+    super().__init__(model, config, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 184, in __init__
+    self.inject_adapter(self.model, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 501, in inject_adapter
+    self._create_and_replace(peft_config, adapter_name, target, target_name, parent, current_key=key)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 235, in _create_and_replace
+    new_module = self._create_new_module(lora_config, adapter_name, target, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 330, in _create_new_module
+    from .bnb import dispatch_bnb_8bit
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/bnb.py", line 19, in <module>
+    import bitsandbytes as bnb
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/__init__.py", line 15, in <module>
+    from .nn import modules
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/nn/__init__.py", line 21, in <module>
+    from .triton_based_modules import (
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/nn/triton_based_modules.py", line 7, in <module>
+    from bitsandbytes.triton.int8_matmul_mixed_dequantize import (
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/triton/int8_matmul_mixed_dequantize.py", line 12, in <module>
+    from triton.ops.matmul_perf_model import early_config_prune, estimate_matmul_time
+ModuleNotFoundError: No module named 'triton.ops'
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 17/17 [00:00<00:00, 199.37it/s]
+Loading checkpoint shards:   0%|                                                                                                                                                                                                                                | 0/17 [00:00<?, ?it/s]Traceback (most recent call last):
   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 443, in <module>
+    main()
+  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 360, in main
+    model = get_peft_model(model, lora_config)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/mapping.py", line 222, in get_peft_model
+    return MODEL_TYPE_TO_PEFT_MODEL_MAPPING[peft_config.task_type](
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/peft_model.py", line 1684, in __init__
+    super().__init__(model, peft_config, adapter_name, **kwargs)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/peft_model.py", line 176, in __init__
+    self.base_model = cls(model, {adapter_name: peft_config}, adapter_name)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 141, in __init__
+    super().__init__(model, config, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 184, in __init__
+    self.inject_adapter(self.model, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 501, in inject_adapter
+    self._create_and_replace(peft_config, adapter_name, target, target_name, parent, current_key=key)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 235, in _create_and_replace
+    new_module = self._create_new_module(lora_config, adapter_name, target, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 330, in _create_new_module
+    from .bnb import dispatch_bnb_8bit
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/bnb.py", line 19, in <module>
+    import bitsandbytes as bnb
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/__init__.py", line 15, in <module>
+    from .nn import modules
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/nn/__init__.py", line 21, in <module>
+    from .triton_based_modules import (
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/nn/triton_based_modules.py", line 7, in <module>
+    from bitsandbytes.triton.int8_matmul_mixed_dequantize import (
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/triton/int8_matmul_mixed_dequantize.py", line 12, in <module>
+    from triton.ops.matmul_perf_model import early_config_prune, estimate_matmul_time
+ModuleNotFoundError: No module named 'triton.ops'
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 17/17 [00:00<00:00, 198.19it/s]
 Traceback (most recent call last):
   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 443, in <module>
     main()
-    main()
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 341, in main
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 341, in main
-    model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-     model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-          ^^^^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-^^^^^^  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrained
-^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrained
-    return model_class.from_pretrained(
-             return model_class.from_pretrained(
- ^^^^^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-^^^^  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
-^^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
-    return func(*args, **kwargs)
-    return func(*args, **kwargs)
-              ^ ^ ^ ^ ^ ^ ^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
-^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 4343, in from_pretrained
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 4343, in from_pretrained
-        model = cls(config, *model_args, **model_kwargs)model = cls(config, *model_args, **model_kwargs)
-
-                       ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-^
-TypeError: TypeErrorQwen3ForCausalLM.__init__() got an unexpected keyword argument 'dtype':
-Qwen3ForCausalLM.__init__() got an unexpected keyword argument 'dtype'
+  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 360, in main
+    model = get_peft_model(model, lora_config)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/mapping.py", line 222, in get_peft_model
+    return MODEL_TYPE_TO_PEFT_MODEL_MAPPING[peft_config.task_type](
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/peft_model.py", line 1684, in __init__
+    super().__init__(model, peft_config, adapter_name, **kwargs)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/peft_model.py", line 176, in __init__
+    self.base_model = cls(model, {adapter_name: peft_config}, adapter_name)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 141, in __init__
+    super().__init__(model, config, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 184, in __init__
+    self.inject_adapter(self.model, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 501, in inject_adapter
+    self._create_and_replace(peft_config, adapter_name, target, target_name, parent, current_key=key)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 235, in _create_and_replace
+    new_module = self._create_new_module(lora_config, adapter_name, target, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 330, in _create_new_module
+    from .bnb import dispatch_bnb_8bit
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/bnb.py", line 19, in <module>
+    import bitsandbytes as bnb
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/__init__.py", line 15, in <module>
+    from .nn import modules
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/nn/__init__.py", line 21, in <module>
+    from .triton_based_modules import (
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/nn/triton_based_modules.py", line 7, in <module>
+    from bitsandbytes.triton.int8_matmul_mixed_dequantize import (
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/triton/int8_matmul_mixed_dequantize.py", line 12, in <module>
+    from triton.ops.matmul_perf_model import early_config_prune, estimate_matmul_time
+ModuleNotFoundError: No module named 'triton.ops'
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 17/17 [00:00<00:00, 198.23it/s]
 Traceback (most recent call last):
   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 443, in <module>
     main()
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 341, in main
-    model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrained
-    return model_class.from_pretrained(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 4343, in from_pretrained
-    model = cls(config, *model_args, **model_kwargs)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: Qwen3ForCausalLM.__init__() got an unexpected keyword argument 'dtype'
+  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 360, in main
+    model = get_peft_model(model, lora_config)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/mapping.py", line 222, in get_peft_model
+    return MODEL_TYPE_TO_PEFT_MODEL_MAPPING[peft_config.task_type](
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/peft_model.py", line 1684, in __init__
+    super().__init__(model, peft_config, adapter_name, **kwargs)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/peft_model.py", line 176, in __init__
+    self.base_model = cls(model, {adapter_name: peft_config}, adapter_name)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 141, in __init__
+    super().__init__(model, config, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 184, in __init__
+    self.inject_adapter(self.model, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 501, in inject_adapter
+    self._create_and_replace(peft_config, adapter_name, target, target_name, parent, current_key=key)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 235, in _create_and_replace
+    new_module = self._create_new_module(lora_config, adapter_name, target, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 330, in _create_new_module
+    from .bnb import dispatch_bnb_8bit
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/bnb.py", line 19, in <module>
+    import bitsandbytes as bnb
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/__init__.py", line 15, in <module>
+    from .nn import modules
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/nn/__init__.py", line 21, in <module>
+    from .triton_based_modules import (
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/nn/triton_based_modules.py", line 7, in <module>
+    from bitsandbytes.triton.int8_matmul_mixed_dequantize import (
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/triton/int8_matmul_mixed_dequantize.py", line 12, in <module>
+    from triton.ops.matmul_perf_model import early_config_prune, estimate_matmul_time
+ModuleNotFoundError: No module named 'triton.ops'
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 17/17 [00:00<00:00, 194.03it/s]
 Traceback (most recent call last):
   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 443, in <module>
     main()
-  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 341, in main
-    model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrained
-    return model_class.from_pretrained(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 4343, in from_pretrained
-    model = cls(config, *model_args, **model_kwargs)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: Qwen3ForCausalLM.__init__() got an unexpected keyword argument 'dtype'
-[2026-08-10 10:35:08,586] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2624533
-[2026-08-10 10:35:08,587] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2624534
-[2026-08-10 10:35:08,626] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2624535
-[2026-08-10 10:35:08,789] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2624536
-[2026-08-10 10:35:08,822] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2624537
-[2026-08-10 10:35:08,852] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2624538
-[2026-08-10 10:35:08,868] [ERROR] [launch.py:325:sigkill_handler] ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = 1
+  File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 360, in main
+    model = get_peft_model(model, lora_config)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/mapping.py", line 222, in get_peft_model
+    return MODEL_TYPE_TO_PEFT_MODEL_MAPPING[peft_config.task_type](
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/peft_model.py", line 1684, in __init__
+    super().__init__(model, peft_config, adapter_name, **kwargs)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/peft_model.py", line 176, in __init__
+    self.base_model = cls(model, {adapter_name: peft_config}, adapter_name)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 141, in __init__
+    super().__init__(model, config, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 184, in __init__
+    self.inject_adapter(self.model, adapter_name, low_cpu_mem_usage=low_cpu_mem_usage)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/tuners_utils.py", line 501, in inject_adapter
+    self._create_and_replace(peft_config, adapter_name, target, target_name, parent, current_key=key)
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 235, in _create_and_replace
+    new_module = self._create_new_module(lora_config, adapter_name, target, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/model.py", line 330, in _create_new_module
+    from .bnb import dispatch_bnb_8bit
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/peft/tuners/lora/bnb.py", line 19, in <module>
+    import bitsandbytes as bnb
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/__init__.py", line 15, in <module>
+    from .nn import modules
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/nn/__init__.py", line 21, in <module>
+    from .triton_based_modules import (
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/nn/triton_based_modules.py", line 7, in <module>
+    from bitsandbytes.triton.int8_matmul_mixed_dequantize import (
+  File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/bitsandbytes/triton/int8_matmul_mixed_dequantize.py", line 12, in <module>
+    from triton.ops.matmul_perf_model import early_config_prune, estimate_matmul_time
+ModuleNotFoundError: No module named 'triton.ops'
+[2026-08-10 10:39:00,603] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2625648
+[2026-08-10 10:39:00,736] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2625649
+[2026-08-10 10:39:00,737] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2625650
+[2026-08-10 10:39:00,814] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2625651
+[2026-08-10 10:39:00,841] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2625652
+[2026-08-10 10:39:00,998] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2625653
+[2026-08-10 10:39:01,089] [ERROR] [launch.py:325:sigkill_handler] ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = 1
