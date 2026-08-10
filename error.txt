@@ -1,18 +1,2 @@
-  python <<'PYEOF'                                                                                                                                               
-  src = open('/tmp/ds_pp.py').read()
-  lines = src.split('\n')
-  import re
-  start = None
-  for i, l in enumerate(lines):
-      if 'def _post_init_method' in l:
-          start = i
-          break                                                                                                                                                  
-  if start is None:
-      print("method not found")
-  else:
-      end = start + 1
-      while end < len(lines) and not re.match(r'^    def ', lines[end]):
-          end += 1
-      for i in range(start, min(end, start+45)):
-          print(f"{i+1}: {lines[i]}")
-  PYEOF
+ python -c "from transformers import FSDPConfig; import inspect; print('file:', inspect.getsourcefile(FSDPConfig)); print('fields:', 
+  list(FSDPConfig.__dataclass_fields__))" 
