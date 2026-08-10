@@ -26,11 +26,16 @@
 #       --min-negative-accuracy 0.98
 set -euo pipefail
 
-MODEL="${MODEL:-Qwen/Qwen3-32B}"
+# Default to the local model dir (matches train_qlora.py's --model_name default
+# path style). Override with MODEL=... if you use a different base.
+MODEL="${MODEL:-../../models/Qwen3_32B/}"
 ADAPTER_DIR="${ADAPTER_DIR:-lora_train/runs/qwen3_32b_boundary_qlora}"
 MERGED_DIR="${MERGED_DIR:-lora_train/runs/qwen3_32b_boundary_merged}"
 PORT="${PORT:-8000}"
 MODE="${MODE:-merge}"   # merge | lora
+# vLLM tensor-parallel size: 32B bf16 needs ~64GB VRAM -> 3x3090 minimum.
+# Defaults to all visible GPUs; override with TP_SIZE=N.
+TP_SIZE="${TP_SIZE:-$(python -c "import torch; print(torch.cuda.device_count())" 2>/dev/null || echo 1)}"
 
 if [[ "$MODE" == "merge" ]]; then
     if [[ ! -d "$MERGED_DIR" ]]; then
@@ -39,7 +44,11 @@ if [[ "$MODE" == "merge" ]]; then
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch, shutil
-base = AutoModelForCausalLM.from_pretrained("$MODEL", torch_dtype=torch.bfloat16, trust_remote_code=True)
+# device_map="cpu": merge loads the full 64GB bf16 base into CPU RAM (the host
+# has 469GB), NOT GPU. Naive load (default device_map) tries to put the model
+# on a single 24GB GPU and OOMs before merge can run. Merge itself is a pure
+# CPU matmul (LoRA A@B added to base weight), no GPU needed.
+base = AutoModelForCausalLM.from_pretrained("$MODEL", torch_dtype=torch.bfloat16, trust_remote_code=True, device_map="cpu")
 tok = AutoTokenizer.from_pretrained("$MODEL", trust_remote_code=True)
 model = PeftModel.from_pretrained(base, "$ADAPTER_DIR")
 model = model.merge_and_unload()
@@ -57,6 +66,7 @@ PY
         --dtype bfloat16 \
         --max-model-len 2048 \
         --gpu-memory-utilization 0.90 \
+        --tensor-parallel-size "$TP_SIZE" \
         --enforce-eager
 else
     # Hot-swap mode: keep base in nf4-ish fp16 and load adapter via --enable-lora.
@@ -68,6 +78,7 @@ else
         --dtype bfloat16 \
         --max-model-len 2048 \
         --gpu-memory-utilization 0.90 \
+        --tensor-parallel-size "$TP_SIZE" \
         --enable-lora \
         --lora-modules "boundary=$ADAPTER_DIR" \
         --enforce-eager
