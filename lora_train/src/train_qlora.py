@@ -342,8 +342,12 @@ def main() -> None:
     # (~11GB for 32B across 6 GPUs); the later .to() is then a no-op on
     # already-placed shards. Requires the process group (initialized at top
     # of main) + deepspeed.comm.init_distributed() so DSConfig.world_size=6.
-    # low_cpu_mem_usage=True streams weights from disk (meta init), so each
-    # rank's CPU peak is ~one tensor, not the full 64GB state_dict.
+    # Do NOT set low_cpu_mem_usage=True here: it makes transformers build the
+    # model on the meta device, and zero.Init's _post_init_method then calls
+    # param.data.to(local_device) on a meta tensor -> "Cannot copy out of
+    # meta tensor; no data!". We need real tensors so zero.Init can move +
+    # partition them. CPU peak is then ~64GB per rank transiently (~384GB
+    # across 6) but the host has 469GB free.
     if args.deepspeed:
         from deepspeed import zero
 
@@ -361,7 +365,6 @@ def main() -> None:
         ds_config_dict["gradient_accumulation_steps"] = accum
         ds_config_dict["train_batch_size"] = micro * accum * world_size
 
-        model_kwargs["low_cpu_mem_usage"] = True
         with zero.Init(config_dict_or_path=ds_config_dict):
             model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
     else:
