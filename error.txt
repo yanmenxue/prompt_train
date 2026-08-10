@@ -1,48 +1,13 @@
-(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train# NCCL_IB_DISABLE=1   CUDA_VISIBLE_DEVICES=2,3,4,5,6,7    curl -s --max-time 20 "https://raw.githubusercontent.com/deepspeedai/DeepSpeed/v0.16.1/deepspeed/runtime/zero/partition_parameters.py" -o /tmp/ds_pp.py &&     
-  python -c "                                                                                                                                                    
-  src=open('/tmp/ds_pp.py').read()                                                                                                                               
-  lines=src.split('\n')                                                                                                                                          
-  import re                                                                                                                                                      
-  # 抓 _post_init_method 方法体                                                                                                                                  
-  for i,l in enumerate(lines):                                                                                                                                   
-      if 'def _post_init_method' in l:                                                                                                                           
-          start=i                                                                                                                                                
-          end=next((j for j in range(start+1,len(lines)) if re.match(r'    def ', lines[j])), start+40)                                                          
-          print('\n'.join(lines[start:end]))                                                                                                                     
-          break                                                                                                                                                  
-  "                                    ank0]:   File "/disk1/duhw/code/prompt_train/lora_train/src/train_qlora.py", line 369, in main
-[rank0]:     model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-[rank0]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/models/auto/auto_factory.py", line 571, in from_pretrained
-[rank0]:     return model_class.from_pretrained(
-[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 279, in _wrapper
-[rank0]:     return func(*args, **kwargs)
-[rank0]:            ^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/modeling_utils.py", line 4343, in from_pretrained
-[rank0]:     model = cls(config, *model_args, **model_kwargs)
-[rank0]:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 511, in wrapper
-[rank0]:     f(module, *args, **kwargs)
-[rank0]:   File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 769, in __init__
-[rank0]:     self.model = Qwen3Model(config)
-[rank0]:                  ^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 511, in wrapper
-[rank0]:     f(module, *args, **kwargs)
-[rank0]:   File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 480, in __init__
-[rank0]:     self.embed_tokens = nn.Embedding(config.vocab_size, config.hidden_size, self.padding_idx)
-[rank0]:                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]:   File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 521, in wrapper
-[rank0]:     self._post_init_method(module)
-[rank0]:   File "/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/deepspeed/runtime/zero/partition_parameters.py", line 1087, in _post_init_method
-[rank0]:     param.data = param.data.to(self.local_device)
-[rank0]:                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[rank0]: NotImplementedError: Cannot copy out of meta tensor; no data!
-[rank0]:[W810 11:24:32.152456563 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
-[2026-08-10 11:24:32,213] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2643522
-[2026-08-10 11:24:32,466] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2643523
-[2026-08-10 11:24:32,522] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2643524
-[2026-08-10 11:24:32,557] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2643525
-[2026-08-10 11:24:32,581] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2643526
-[2026-08-10 11:24:32,581] [INFO] [launch.py:319:sigkill_handler] Killing subprocess 2643527
-[2026-08-10 11:24:32,599] [ERROR] [launch.py:325:sigkill_handler] ['/root/anaconda3/envs/ds_train/bin/python3.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = 1.11', '-u', 'lora_train/src/train_qlora.py', '--local_rank=5', '--max_steps', '20', '--max_samples', '16', '--per_device_batch', '1', '--grad_accum', '1', '--model_name', '../../models/Qwen3_32B/', '--attn_impl', 'sdpa', '--deepspeed', 'lora_train/configs/ds_zero3_offload.json'] exits with return code = 1
+(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train# curl -s --max-time 20 "https://raw.githubusercontent.com/deepspeedai/DeepSpeed/v0.16.1/deepspeed/runtime/zero/partition_parameters.py" -o /tmp/ds_pp.py && python -c "                                                     
+  src=open('/tmp/ds_pp.py').read()
+  lines=src.split('\n')
+  import re
+  # 抓 _post_init_method 方法体
+  for i,l in enumerate(lines):
+      if 'def _post_init_method' in l:
+          start=i
+          end=next((j for j in range(start+1,len(lines)) if re.match(r'    def ', lines[j])), start+40)
+          print('\n'.join(lines[start:end]))
+          break
+  "
+(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train#
