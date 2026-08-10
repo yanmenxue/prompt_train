@@ -313,7 +313,7 @@ def main() -> None:
             attn_impl = "sdpa"
     model_kwargs: dict[str, Any] = {
         "trust_remote_code": True,
-        "dtype": torch.bfloat16,
+        "torch_dtype": torch.bfloat16,
         "attn_implementation": attn_impl,
     }
     if args.load_in_4bit:
