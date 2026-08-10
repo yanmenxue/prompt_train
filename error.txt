@@ -1,9 +1,10 @@
-  NCCL_IB_DISABLE=1 \
-  CUDA_VISIBLE_DEVICES=2,3,4,5,6,7 \
-  torchrun --nproc_per_node=6 --master_port=29500 \
-    lora_train/src/train_qlora.py \
-    --fsdp \
-    --max_steps 20 --max_samples 16 \
-    --per_device_batch 1 --grad_accum 1 \
-    --model_name ../../models/Qwen3_32B/ \
-    --attn_impl sdpa
+   python -c "
+  import transformers, os
+  p = os.path.join(os.path.dirname(transformers.__file__), 'trainer.py')
+  print('trainer.py:', p)                                                                                                                                        
+  src = open(p).read()                                                                                                                                           
+  # 找 fsdp 处理的关键行                                                                                                                                         
+  for i, l in enumerate(src.split('\n'), 1):                                                                                                                     
+      if 'fsdp_transformer_layer_cls_to_wrap' in l or 'fsdp_auto_wrap_policy' in l or ('load_best_model_at_end' in l and 'fsdp' in l.lower()):                   
+          print(f'{i}: {l.strip()[:100]}')                                                                                                                       
+  " 2>&1 | head -30
