@@ -1,8 +1,9 @@
-(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train# python test.py
-trainer.py: /root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/trainer.py
-2036: fsdp_transformer_layer_cls_to_wrap = self.args.fsdp_config.get(
-2044: elif fsdp_transformer_layer_cls_to_wrap is not None:
-2046: for layer_class in fsdp_transformer_layer_cls_to_wrap:
-5184: # `save_only_model` can't be used with DeepSpeed/FSDP along with `load_best_model_at_end`
-5224: from peft.utils.other import fsdp_auto_wrap_policy
-5227: self.accelerator.state.fsdp_plugin.auto_wrap_policy = fsdp_auto_wrap_policy(self.model)
+  NCCL_IB_DISABLE=1 \
+  CUDA_VISIBLE_DEVICES=2,3,4,5,6,7 \
+  torchrun --nproc_per_node=6 --master_port=29500 \
+    lora_train/src/train_qlora.py \
+    --fsdp \
+    --max_steps 20 --max_samples 16 \
+    --per_device_batch 1 --grad_accum 1 \
+    --model_name ../../models/Qwen3_32B/ \
+    --attn_impl sdpa
