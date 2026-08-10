@@ -5,3 +5,8 @@ adapter_config.json  adapter_model.safetensors  added_tokens.json  chat_template
 (ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train/lora_train/runs/qwen3_32b_boundary_qlora# cd checkpoint-5
 (ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train/lora_train/runs/qwen3_32b_boundary_qlora/checkpoint-5# ls
 adapter_config.json  adapter_model.safetensors  chat_template.jinja  optimizer.pt  README.md  rng_state.pth  scheduler.pt  tokenizer_config.json  tokenizer.json  trainer_state.json  training_args.bin
+
+(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train/lora_train/runs/qwen3_32b_boundary_qlora/checkpoint-5# ls -l optimizer.pt
+-rw-r--r-- 1 root root 2148254819 Aug  8 23:23 optimizer.pt
+(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train/lora_train/runs/qwen3_32b_boundary_qlora/checkpoint-5# ls -l adapter_model.safetensors
+-rw------- 1 root root 1073863208 Aug  8 23:23 adapter_model.safetensors
