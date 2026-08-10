@@ -1,2 +1,5 @@
- python -c "from transformers import FSDPConfig; import inspect; print('file:', inspect.getsourcefile(FSDPConfig)); print('fields:', 
-  list(FSDPConfig.__dataclass_fields__))" 
+(ds_train) root@poissongpu006:~# python -c "from transformers import FSDPConfig; import inspect; print('file:', inspect.getsourcefile(FSDPConfig)); print('fields:',
+  list(FSDPConfig.__dataclass_fields__))"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ImportError: cannot import name 'FSDPConfig' from 'transformers' (/root/anaconda3/envs/ds_train/lib/python3.11/site-packages/transformers/__init__.py)
