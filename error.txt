@@ -1,4 +1,4 @@
-  NCCL_IB_DISABLE=1 \
+(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train#  NCCL_IB_DISABLE=1 \
   CUDA_VISIBLE_DEVICES=2,3,4,5,6,7 \
   torchrun --nproc_per_node=6 --master_port=29500 \
     lora_train/src/train_qlora.py \
@@ -7,3 +7,54 @@
     --per_device_batch 1 --grad_accum 1 \
     --model_name ../../models/Qwen3_32B/ \
     --attn_impl sdpa
+W0810 15:04:56.846000 2695486 site-packages/torch/distributed/run.py:792]
+W0810 15:04:56.846000 2695486 site-packages/torch/distributed/run.py:792] *****************************************
+W0810 15:04:56.846000 2695486 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed.
+W0810 15:04:56.846000 2695486 site-packages/torch/distributed/run.py:792] *****************************************
+[2026-08-10 15:05:01,443] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-10 15:05:01,595] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-10 15:05:01,636] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-10 15:05:01,642] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-10 15:05:01,657] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2026-08-10 15:05:01,658] [INFO] [real_accelerator.py:219:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 17/17 [00:00<00:00, 202.17it/s]
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 17/17 [00:00<00:00, 204.28it/s]
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 17/17 [00:00<00:00, 203.31it/s]
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 17/17 [00:00<00:00, 202.93it/s]
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 17/17 [00:00<00:00, 200.61it/s]
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 17/17 [00:00<00:00, 190.66it/s]
+trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
+trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
+trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
+trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
+trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
+Map (num_proc=1):   0%|                                                                                                                                                                                                                                  | 0/16 [00:00<?, ? examples/s]trainable params: 268,435,456 || all params: 33,030,558,720 || trainable%: 0.8127
+Map (num_proc=1): 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 17.85 examples/s]
+Map (num_proc=1): 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 17.59 examples/s]
+Map (num_proc=1): 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 18.00 examples/s]
+Map (num_proc=1): 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 17.82 examples/s]
+Map (num_proc=1): 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 17.63 examples/s]
+Map (num_proc=1): 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 16/16 [00:00<00:00, 17.39 examples/s]
+Map (num_proc=1): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.21 examples/s]
+Map (num_proc=1): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.22 examples/s]
+Map (num_proc=1): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.09 examples/s]
+Map (num_proc=1): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.15 examples/s]
+Map (num_proc=1): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.12 examples/s]
+Map (num_proc=1): 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.18 examples/s]
+When using FSDP full shard, instead of using `gradient_checkpointing` in TrainingArguments, please use `activation_checkpointing` in `fsdp_config`. The former introduces a redundant AllGather operation in backward pass. Reference: https://github.com/huggingface/transformers/issues/30404
+No label_names provided for model class `PeftModelForCausalLM`. Since `PeftModel` hides base models input arguments, if label_names is not given, label_names can't be set automatically within `Trainer`. Note that empty label_names list will be used instead.
+When using FSDP full shard, instead of using `gradient_checkpointing` in TrainingArguments, please use `activation_checkpointing` in `fsdp_config`. The former introduces a redundant AllGather operation in backward pass. Reference: https://github.com/huggingface/transformers/issues/30404
+When using FSDP full shard, instead of using `gradient_checkpointing` in TrainingArguments, please use `activation_checkpointing` in `fsdp_config`. The former introduces a redundant AllGather operation in backward pass. Reference: https://github.com/huggingface/transformers/issues/30404
+When using FSDP full shard, instead of using `gradient_checkpointing` in TrainingArguments, please use `activation_checkpointing` in `fsdp_config`. The former introduces a redundant AllGather operation in backward pass. Reference: https://github.com/huggingface/transformers/issues/30404
+When using FSDP full shard, instead of using `gradient_checkpointing` in TrainingArguments, please use `activation_checkpointing` in `fsdp_config`. The former introduces a redundant AllGather operation in backward pass. Reference: https://github.com/huggingface/transformers/issues/30404
+No label_names provided for model class `PeftModelForCausalLM`. Since `PeftModel` hides base models input arguments, if label_names is not given, label_names can't be set automatically within `Trainer`. Note that empty label_names list will be used instead.
+When using FSDP full shard, instead of using `gradient_checkpointing` in TrainingArguments, please use `activation_checkpointing` in `fsdp_config`. The former introduces a redundant AllGather operation in backward pass. Reference: https://github.com/huggingface/transformers/issues/30404
+No label_names provided for model class `PeftModelForCausalLM`. Since `PeftModel` hides base models input arguments, if label_names is not given, label_names can't be set automatically within `Trainer`. Note that empty label_names list will be used instead.
+No label_names provided for model class `PeftModelForCausalLM`. Since `PeftModel` hides base models input arguments, if label_names is not given, label_names can't be set automatically within `Trainer`. Note that empty label_names list will be used instead.
+No label_names provided for model class `PeftModelForCausalLM`. Since `PeftModel` hides base models input arguments, if label_names is not given, label_names can't be set automatically within `Trainer`. Note that empty label_names list will be used instead.
+No label_names provided for model class `PeftModelForCausalLM`. Since `PeftModel` hides base models input arguments, if label_names is not given, label_names can't be set automatically within `Trainer`. Note that empty label_names list will be used instead.
+
+  5%|████████████▏                                                                                                                                                                                                                                      | 1/20 [00:40<12:54, 40.75s/it]
+ 10%|████████████████████████▎                                                                                                                                                                                                                          | 2/20 [01:19<11:54, 39.72s/it]
+{'loss': 0.1301, 'grad_norm': 0.02440115623176098, 'learning_rate': 4.698684378016222e-05, 'epoch': 1.67}
+{'loss': 0.0, 'grad_norm': 5.639489972963929e-05, 'learning_rate': 3.1137137178519985e-05, 'epoch': 3.33}
