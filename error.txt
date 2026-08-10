@@ -72,3 +72,12 @@ No label_names provided for model class `PeftModelForCausalLM`. Since `PeftModel
   warnings.warn(
 /root/anaconda3/envs/ds_train/lib/python3.11/site-packages/torch/distributed/fsdp/fully_sharded_data_parallel.py:690: FutureWarning: FSDP.state_dict_type() and FSDP.set_state_dict_type() are being deprecated. Please use APIs, get_state_dict() and set_state_dict(), which can support different parallelisms, FSDP1, FSDP2, DDP. API doc: https://pytorch.org/docs/stable/distributed.checkpoint.html#torch.distributed.checkpoint.state_dict.get_state_dict .Tutorial: https://pytorch.org/tutorials/recipes/distributed_checkpoint_recipe.html .
   warnings.warn(
+
+
+(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train/lora_train/runs/qwen3_32b_boundary_qlora# ls
+adapter_config.json  adapter_model.safetensors  added_tokens.json  chat_template.jinja  checkpoint-20  checkpoint-5  merges.txt  README.md  runs  special_tokens_map.json  tokenizer_config.json  tokenizer.json  training_args.bin  vocab.json
+(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train/lora_train/runs/qwen3_32b_boundary_qlora# du -sh
+8.1G    .
+(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train/lora_train/runs/qwen3_32b_boundary_qlora# cd checkpoint-5
+(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train/lora_train/runs/qwen3_32b_boundary_qlora/checkpoint-5# ls
+adapter_config.json  adapter_model.safetensors  chat_template.jinja  optimizer.pt  README.md  rng_state.pth  scheduler.pt  tokenizer_config.json  tokenizer.json  trainer_state.json  training_args.bin
