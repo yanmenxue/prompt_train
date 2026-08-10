@@ -1,13 +1,18 @@
-(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train# curl -s --max-time 20 "https://raw.githubusercontent.com/deepspeedai/DeepSpeed/v0.16.1/deepspeed/runtime/zero/partition_parameters.py" -o /tmp/ds_pp.py && python -c "                                                     
-  src=open('/tmp/ds_pp.py').read()
-  lines=src.split('\n')
+  python <<'PYEOF'                                                                                                                                               
+  src = open('/tmp/ds_pp.py').read()
+  lines = src.split('\n')
   import re
-  # 抓 _post_init_method 方法体
-  for i,l in enumerate(lines):
+  start = None
+  for i, l in enumerate(lines):
       if 'def _post_init_method' in l:
-          start=i
-          end=next((j for j in range(start+1,len(lines)) if re.match(r'    def ', lines[j])), start+40)
-          print('\n'.join(lines[start:end]))
-          break
-  "
-(ds_train) root@poissongpu006:/disk1/duhw/code/prompt_train#
+          start = i
+          break                                                                                                                                                  
+  if start is None:
+      print("method not found")
+  else:
+      end = start + 1
+      while end < len(lines) and not re.match(r'^    def ', lines[end]):
+          end += 1
+      for i in range(start, min(end, start+45)):
+          print(f"{i+1}: {lines[i]}")
+  PYEOF
