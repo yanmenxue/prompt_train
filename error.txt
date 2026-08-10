@@ -9,9 +9,11 @@
   conda install -c nvidia/label/cuda-12.4.0 cuda-toolkit=12.4 -y
 
   # 让当前 shell 的 nvcc 立即可用                                                                                                                                
-  export CUDA_HOME=$CONDA_PREFIX
-  export PATH=$CONDA_PREFIX/bin:$PATH
-  nvcc --version   # 应显示 12.4                                                                                                                                 
+  export CUDA_HOME=/usr/local/cuda-12.4
+  export PATH=$CUDA_HOME/bin:$PATH
+  export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+  nvcc --version   # 必须显示 12.4，不是 13.0 
+                                                                                                                              
 
   # ========== 第 4 步：装其余套件 ==========                                                                                                                    
   pip install \
