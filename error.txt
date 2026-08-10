@@ -39,3 +39,11 @@
 
   # 验证 nvcc 和 torch CUDA 版本一致（都该是 12.4）                                                                                                              
   python -c "import torch; print('torch CUDA:', torch.version.cuda); print('nvcc:'); import subprocess; subprocess.run(['nvcc','--version'])" 
+  NCCL_IB_DISABLE=1 \
+  CUDA_VISIBLE_DEVICES=2,3,4,5,6,7 \
+  deepspeed lora_train/src/train_qlora.py \
+      --max_steps 20 --max_samples 16 \
+      --per_device_batch 1 --grad_accum 1 \
+      --model_name ../../models/Qwen3_32B/ \
+      --attn_impl sdpa \
+      --deepspeed lora_train/configs/ds_zero3_offload.json
