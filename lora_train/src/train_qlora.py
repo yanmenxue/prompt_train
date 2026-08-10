@@ -160,6 +160,16 @@ def parse_args() -> argparse.Namespace:
     # internally via env (LOCAL_RANK), we just need to not choke on it.
     p.add_argument("--local_rank", type=int, default=-1)
     p.add_argument("--local-rank", dest="local_rank_dash", type=int, default=-1)
+    # FSDP path: bf16 base + PyTorch FSDP full_shard. Does NOT depend on
+    # DeepSpeed's deepspeed.initialize (which calls module.to(device) on the
+    # full 64GB model and OOMs a 24GB card before partition can run). FSDP's
+    # sharding is driven by accelerate's fsdp_plugin inside Trainer.prepare().
+    p.add_argument(
+        "--fsdp",
+        action="store_true",
+        default=False,
+        help="use PyTorch FSDP full_shard (bf16 base) instead of DeepSpeed",
+    )
     args = p.parse_args()
     # argparse turns `--deepspeed None` into the STRING "None", not Python None.
     # transformers would then try to load a config file named "None" and fail.
@@ -334,41 +344,15 @@ def main() -> None:
             bnb_4bit_compute_dtype=torch.bfloat16,
             bnb_4bit_quant_storage=torch.uint8,
         )
-    # ZeRO-3: load under deepspeed.zero.Init() so each parameter is partitioned
-    # across ranks AT CREATION TIME. DS's _configure_distributed_model calls
-    # module.to(device) which moves the FULL bf16 base (~64GB) onto each 24GB
-    # GPU before ZeRO-3 partition runs -> OOM. zero.Init patches parameter
-    # creation so each rank only ever holds its 1/world_size partition
-    # (~11GB for 32B across 6 GPUs); the later .to() is then a no-op on
-    # already-placed shards. Requires the process group (initialized at top
-    # of main) + deepspeed.comm.init_distributed() so DSConfig.world_size=6.
-    # Do NOT set low_cpu_mem_usage=True here: it makes transformers build the
-    # model on the meta device, and zero.Init's _post_init_method then calls
-    # param.data.to(local_device) on a meta tensor -> "Cannot copy out of
-    # meta tensor; no data!". We need real tensors so zero.Init can move +
-    # partition them. CPU peak is then ~64GB per rank transiently (~384GB
-    # across 6) but the host has 469GB free.
-    if args.deepspeed:
-        from deepspeed import zero
-
-        world_size = (
-            torch.distributed.get_world_size()
-            if torch.distributed.is_initialized()
-            else 1
-        )
-        ds_config_dict = json.loads(
-            Path(args.deepspeed).read_text(encoding="utf-8")
-        )
-        micro = args.per_device_batch
-        accum = args.grad_accum
-        ds_config_dict["train_micro_batch_size_per_gpu"] = micro
-        ds_config_dict["gradient_accumulation_steps"] = accum
-        ds_config_dict["train_batch_size"] = micro * accum * world_size
-
-        with zero.Init(config_dict_or_path=ds_config_dict):
-            model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
-    else:
-        model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
+    # Load the bf16 base. zero.Init (parameter partition at creation time)
+    # is incompatible with transformers 4.51's meta-init default: DS's
+    # _post_init_method calls param.data.to(local_device) unconditionally
+    # (partition_parameters.py:1087), which dies on meta tensors with no data.
+    # So we load a real CPU model and rely on accelerate's prepare() to shard.
+    # If _configure_distributed_model's module.to(device) still OOMs with the
+    # full 64GB model, the fix is enabling offload_param in the DS config (so
+    # the .to() targets CPU offload buffers, not the 24GB GPU).
+    model = AutoModelForCausalLM.from_pretrained(args.model_name, **model_kwargs)
     model.config.use_cache = False
     if hasattr(model, "gradient_checkpointing_enable"):
         model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
@@ -413,6 +397,37 @@ def main() -> None:
     )
 
     # ---- training args ---------------------------------------------------
+    # FSDP path: PyTorch FSDP full_shard, NOT DeepSpeed. DS 0.16.1 + transformers
+    # 4.51 is a dead end: zero.Init's _post_init_method does param.data.to(
+    # local_device) unconditionally (partition_parameters.py:1087), which dies
+    # on meta tensors ("Cannot copy out of meta tensor"); and the plain path
+    # hits _configure_distributed_model's module.to(device) (engine.py:1163)
+    # which moves the full 64GB bf16 base onto a 24GB GPU -> OOM. FSDP avoids
+    # both: it never calls module.to(device) on the full model. Instead, with
+    # cpu_ram_efficient_loading=True, only rank 0 loads the 64GB weights to CPU
+    # and all other ranks build meta shells (0 bytes); then FSDP's
+    # param_init_fn=to_empty + sync_module_states broadcasts sharded params
+    # from rank 0 to every rank's GPU at prepare() time, ~11GB/card.
+    fsdp_kwargs: dict[str, Any] = {}
+    if args.fsdp:
+        # transformers 4.51 has no FSDPConfig class (added later). Pass a dict
+        # to fsdp_config; accelerate's FullyShardedDataParallelPlugin reads
+        # these keys (dataclasses.py:1339+).
+        fsdp_cfg = {
+            "fsdp_transformer_layer_cls_to_wrap": ["Qwen3DecoderLayer"],
+            "min_num_params": 0,
+            # Critical: without this, every rank loads the full 64GB model to
+            # CPU (384GB transient). With it, only rank 0 loads; others build
+            # meta shells. Forces sync_module_states=True (dataclasses.py:
+            # 1474), which sets param_init_fn=to_empty -> FSDP broadcasts
+            # sharded params from rank 0 to every rank's GPU at prepare().
+            "cpu_ram_efficient_loading": True,
+        }
+        fsdp_kwargs = {
+            "fsdp": "full_shard auto_wrap",
+            "fsdp_config": fsdp_cfg,
+        }
+
     targs = TrainingArguments(
         output_dir=args.output_dir,
         num_train_epochs=args.epochs,
@@ -444,6 +459,7 @@ def main() -> None:
         dataloader_num_workers=2,
         remove_unused_columns=False,
         deepspeed=args.deepspeed,
+        **fsdp_kwargs,
     )
     # bf16 base + ZeRO-3: use the standard Trainer (default loss). ZeRO-3
     #   must hook the model forward to all-gather sharded params; our custom
